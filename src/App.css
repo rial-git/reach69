@@ -1,31 +1,68 @@
 #root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
   font-family: "Graduate", sans-serif;
 }
 
 .logo {
-  height: 1em;
-  width: 1em;
-  padding: 1.5em;
+  height: 2.5em;
+  width: 2.5em;
+  padding: 2.5em;
   background-color: aliceblue;
+  margin-bottom: 2rem;
 }
 
-.btns{
+h1 {
+  letter-spacing: -0.04em;
+  font-size: 4em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  max-width: 30ch;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+}
+
+.btnRow {
   display: flex;
   justify-content: center;
-  gap: 1rem;  
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
 }
 
-.btns button{
-  padding: 0.5em 1em;
+.btnRow button {
   border-radius: 50px;
-  height: 5em;
+  font-size: 2em;
   width: 10em;
-  border: none;
-  background-color: #1a1a1a;
-  color: white;
+  height: 3em;
+  background-color: transparent;
+  border: 2px solid black;
+  color: black;
   cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* PLAY button: highlight it */
+#playBtn {
+  background-color: #333;
+  border-radius: 100px;
+  color: white;
+  font-size: 2.5em;
+  border: none;
+}
+
+/* Optional hover effect */
+.btnRow button:hover {
+  transform: scale(1.05);
 }
