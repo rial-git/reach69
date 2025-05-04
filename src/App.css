@@ -1,0 +1,31 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  font-family: "Graduate", sans-serif;
+}
+
+.logo {
+  height: 1em;
+  width: 1em;
+  padding: 1.5em;
+  background-color: aliceblue;
+}
+
+.btns{
+  display: flex;
+  justify-content: center;
+  gap: 1rem;  
+}
+
+.btns button{
+  padding: 0.5em 1em;
+  border-radius: 50px;
+  height: 5em;
+  width: 10em;
+  border: none;
+  background-color: #1a1a1a;
+  color: white;
+  cursor: pointer;
+}
