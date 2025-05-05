@@ -14,7 +14,9 @@ function App() {
 
     <div className='btnRow'>
       <button type="button" id='logInBtn' class="btn btn-outline-dark">Log In</button>
-      <button type="button" id='playBtn' class="btn btn-dark">Play</button>
+
+      {/* idk onclick and this window location href work avulu ig, coz button class */}
+      <button type="button" id='playBtn' class="btn btn-dark" onClick={() => window.location.href = "level1.jsx"}>Play</button>
       <button type="button" id='modesBtn' class="btn btn-outline-dark">Modes</button>
      </div>
      
