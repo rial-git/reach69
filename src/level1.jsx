@@ -1,6 +1,8 @@
 // oh demn inganyum comment idam 
 // for now level 1 irikatte ig, 
 
+import './level1.css';
+
 const Level1 = () => {
     return (
         <>
@@ -14,6 +16,14 @@ const Level1 = () => {
                 <div className="0"> 0 </div>
                 <div className="2"> 2 </div>
             </div>
+        </div>
+
+        <div className="operations"> 
+            <div className="plus"> + </div>
+            <div className="minus"> - </div>
+            <div className="merge"> Merge </div>
+            <div className="multiply"> * </div>
+            <div className="divide"> / </div>
         </div>
         </>
     )

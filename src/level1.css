@@ -16,6 +16,7 @@
     border-radius: 10px;
     padding: 0.3em;
     margin-bottom: 1.2em;
+    cursor: pointer;
   }
   
   .number {
@@ -36,4 +37,25 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .operations {
+    height: 100vh;
+    display: flex;
+    justify-content: center;  /* Center horizontally */
+    align-items: flex-start;      /* Center vertically */
+    text-align: center;
+    gap: 2rem;                /* Space between buttons */
+    padding: 2rem;
+    flex-wrap: wrap;          /* Allow wrap if screen is small */
+  }
+  
+  .operations div {
+    font-size: 2rem;          /* Make them bigger */
+    padding: 1rem 2rem;
+    background-color: #d6d6d6;
+    border: 2px solid #000;
+    border-radius: 8px;
+    cursor: pointer;
   }
