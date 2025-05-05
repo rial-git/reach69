@@ -22,7 +22,7 @@ const Level1 = () => {
             <div className="plus"> + </div>
             <div className="minus"> - </div>
             <div className="merge"> Merge </div>
-            <div className="multiply"> * </div>
+            <div className="multiply"> × </div>
             <div className="divide"> / </div>
         </div>
         </>
