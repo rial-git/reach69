@@ -1,61 +1,69 @@
 .puzzle{
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: "Graduate", sans-serif;
-  }
-  
-  .level1{
-    font-size: 2em;
-    border: 1px black solid;
-    border-radius: 10px;
-    padding: 0.3em;
-    margin-bottom: 1.2em;
-  }
-  
-  .number {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    gap: 2rem;
-    width: 100%; 
-  }
-  
-  .number div{
-    background: #ccc;
-    width: 3em;
-    height: 3em;
-    font-size: 2em;
-    border: 2px solid #000;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    cursor: pointer;
-  }
-  
-  .operations {
-    height: 100vh;
-    display: flex;
-    justify-content: center;  /* Center horizontally */
-    align-items: flex-start;      /* Center vertically */
-    text-align: center;
-    gap: 2rem;                /* Space between buttons */
-    padding: 2rem;
-    flex-wrap: wrap;          /* Allow wrap if screen is small */
-  }
-  
-  .operations div {
-    font-size: 2rem;          /* Make them bigger */
-    padding: 1rem 2rem;
-    background-color: #d6d6d6;
-    border: 2px solid #000;
-    border-radius: 8px;
-    cursor: pointer;
-  }
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Graduate", sans-serif;
+}
+
+.level1{
+  font-size: 2em;
+  border: 1px black solid;
+  border-radius: 10px;
+  padding: 0.3em;
+  margin-bottom: 1.2em;
+}
+
+
+.numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  gap: 2rem;
+  width: 100%; 
+}
+
+
+.number {
+  width: 3em;
+  height: 3em;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.number:hover {
+  background-color: #d0d0d0;
+}
+
+.number.selected {
+  border-color: #000000;
+  box-shadow: 0 0 10px #000000;
+}
+
+.number.merged {
+  background-color: #000000;
+  font-weight: bold;
+  color: white;
+  position: relative;
+}
+
+.number.merged::after {
+  content: '↺';
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 1rem;
+  opacity: 0.6;
+}
