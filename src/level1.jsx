@@ -17,8 +17,9 @@ const Level1 = () => {
       setSelectedIndex(index);
     } else if (
       Math.abs(selectedIndex - index) === 1 &&
-      !blocks[selectedIndex].merged &&
-      !blocks[index].merged
+      !blocks[selectedIndex].merged 
+    //   &&
+    //   !blocks[index].merged
     ) {
       const newBlocks = [...blocks];
       const mergedValue = newBlocks[selectedIndex].value + newBlocks[index].value;
