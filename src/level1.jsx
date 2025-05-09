@@ -58,6 +58,11 @@ const Level1 = () => {
             {block.value}
           </div>
         ))}
+
+        <div> selected Index: {selectedIndex} </div>
+        <div> setSelected Index: {setSelectedIndex} </div>
+
+
       </div>
     </div>
   );

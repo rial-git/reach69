@@ -67,3 +67,28 @@
   font-size: 1rem;
   opacity: 0.6;
 }
+
+.addition-button {
+  font-size: 2rem;
+  width: 3em;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 1.5em;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.addition-button:hover {
+  background-color: #f0f0f0;
+}
+
+.addition-button.active {
+  background-color: #000;
+  color: white;
+  box-shadow: 0 0 10px #000;
+}
