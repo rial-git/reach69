@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
-import Level1 from './Level1'; // Import your Level1 component
+import Level1 from './level1'; // Import your Level1 component
 import Testmode from './testmode'
 
 function App() {
@@ -29,7 +29,7 @@ function AppWrapper() {
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/level1" element={<Level1 />} />
-        <Route path ="testmode" element={<Testmode />} />
+        <Route path ="/testmode" element={<Testmode />} />
       </Routes>
     </Router>
   );
