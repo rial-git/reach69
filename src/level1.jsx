@@ -130,6 +130,7 @@ function performCalculation(state, i1, i2, op) {
     case '-': result = v1 - v2; break;
     case '*': result = v1 * v2; break;
     case '/': result = v1 / v2; break;
+    case 'merge': result = parseFloat(`${v1.toString()}${v2.toString()}`); break;
     default: return state;
   }
 
@@ -197,7 +198,7 @@ const Level1 = () => {
       </div>
       <br></br>
       <div className="operations">
-        {['+', '-', '*', '/'].map((op) => (
+        {['+', '-', '*', '/', 'merge'].map((op) => (
           <button
             key={op}
             type="button"
