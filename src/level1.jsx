@@ -1,60 +1,120 @@
 import React, { useReducer } from 'react';
+import MergeIcon from './assets/merge.svg';
 import './level1.css';
 
-/**
- * Block object represents a number block in the game.
- * @typedef {Object} Block
- * @property {string} id        Unique identifier.
- * @property {string} value     Numeric value as string.
- * @property {Block[]|null} root Children blocks if merged, null otherwise.
- */
+/** Allowed operations, including “merge” */
+const OPS = ['+', '-', '*', '/', 'merge'];
 
-/** Initial numbers (replace with backend fetch later) */
+/** Initial digits (later replace with backend fetch) */
 const initialNums = [7, 1, 2, 0, 2];
 
-/** Generate blocks from the initial numbers */
-const generateInitBlocks = (nums) =>
-  nums.map((num, i) => ({
-    id: `block-${i}-${Date.now()}`,
-    value: num.toString(),
-    root: null,
-  }));
-
-/** The reducer’s initial state */
-const initialState = {
-  blocks: generateInitBlocks(initialNums),
-  selection: { numbers: [], operation: null },
-  error: null,
+/** Reducer actions */
+const ACTIONS = {
+  PICK_NUMBER:    'PICK_NUMBER',
+  PICK_OPERATION: 'PICK_OPERATION',
+  UNDO:           'UNDO',
+  RESET:          'RESET',
+  CLEAR_ERROR:    'CLEAR_ERROR',
 };
 
-/** Core reducer handling selections, calculations, and undo */
-function reducer(state, action) {
-  switch (action.type) {
-    case 'SELECT_NUMBER': {
-      const idx = action.payload;
+/** Create a fresh Block with a UUID */
+function makeBlock(value, root = null) {
+  const obj =  {
+    id: crypto.randomUUID(),
+    value: String(value),
+    root,                 // either null or [blockA, blockB]
+  };
+
+  console.log(obj);
+  return obj;
+}
+
+/** Lazy initializer for useReducer */
+function initState(nums) {
+  return {
+    blocks: nums.map(n => makeBlock(n)),
+    selection: { numbers: [], operation: null },
+    error: null,
+  };
+}
+
+/** Centralized calculation + merge logic */
+function calculateAndMerge(state, i1, i2, op) {
+  const { blocks } = state;
+  const b1 = blocks[i1], b2 = blocks[i2];
+  const v1 = parseFloat(b1.value), v2 = parseFloat(b2.value);
+
+  if (op === '/' && v2 === 0) {
+    return { ...state, error: 'Division by zero is not allowed.' };
+  }
+
+  let result;
+  switch (op) {
+    case '+':      result = v1 + v2; break;
+    case '-':      result = v1 - v2; break;
+    case '*':      result = v1 * v2; break;
+    case '/':      result = v1 / v2; break;
+    case 'merge':  result = parseFloat(`${b1.value}${b2.value}`); break;
+    default:       return state;
+  }
+
+  const [leftChild, rightChild] = i1 < i2 ? [b1, b2] : [b2, b1];
+  const merged = makeBlock(result, [leftChild, rightChild]);
+  
+ const removeSet = new Set([i1, i2]);
+  const newBlocks = blocks
+    .map((blk, idx) => ({ blk, idx }))
+    .filter(({ idx }) => !removeSet.has(idx))
+    .map(({ blk }) => blk);
+
+  const insertAt = Math.min(i1, i2);
+  newBlocks.splice(insertAt, 0, merged);
+  return {
+    blocks: newBlocks,
+    selection: { numbers: [], operation: null },
+    error: null,
+  };
+}
+
+/** Reducer */
+function reducer(state, { type, payload }) {
+  switch (type) {
+    case ACTIONS.CLEAR_ERROR:
+      return { ...state, error: null };
+
+    case ACTIONS.PICK_NUMBER: {
+      const idx = payload;
       const { numbers, operation } = state.selection;
 
-      // Can't pick a third number before an operation
+      // If user already has 2 numbers and no operation, start fresh with this click
       if (numbers.length === 2 && !operation) {
-        return { ...state, error: 'Select an operation or reset before choosing another number.' };
+        return {
+          ...state,
+          selection: { numbers: [idx], operation: null },
+          error: null,
+        };
       }
 
-      // First click
+      // First pick
       if (numbers.length === 0) {
-        return { ...state, selection: { numbers: [idx], operation: null }, error: null };
+        return {
+          ...state,
+          selection: { numbers: [idx], operation: null },
+          error: null,
+        };
       }
 
-      // Second click
+      // Second pick
       if (numbers.length === 1) {
-        if (numbers[0] === idx) {
-          // ignore re-clicking same block
-          return state;
-        }
-        // If op already chosen, do calculation now
+        // clicking same block twice? ignore
+        if (numbers[0] === idx) return state;
+
+        // if we already chose an operation, do it immediately
         if (operation) {
-          return performCalculation(state, numbers[0], idx, operation);
+          return calculateAndMerge(state, numbers[0], idx, operation);
         }
-        // Otherwise just select the second number
+
+        // otherwise just record the second number
         return {
           ...state,
           selection: { numbers: [numbers[0], idx], operation: null },
@@ -65,16 +125,16 @@ function reducer(state, action) {
       return state;
     }
 
-    case 'SELECT_OPERATION': {
-      const op = action.payload;
+    case ACTIONS.PICK_OPERATION: {
+      const op = payload;
       const { numbers } = state.selection;
 
-      // If two numbers already picked, calculate immediately
+      // if two numbers are already selected, calculate now
       if (numbers.length === 2) {
-        return performCalculation(state, numbers[0], numbers[1], op);
+        return calculateAndMerge(state, numbers[0], numbers[1], op);
       }
 
-      // Otherwise just set the operation
+      // otherwise just record the op
       return {
         ...state,
         selection: { numbers: [...numbers], operation: op },
@@ -82,19 +142,14 @@ function reducer(state, action) {
       };
     }
 
-    case 'UNDO': {
-      const idx = action.payload;
+    case ACTIONS.UNDO: {
+      const idx = payload;
       const block = state.blocks[idx];
-
       if (!block.root) {
-        // Nothing to split
         return { ...state, error: 'Nothing to undo here.' };
       }
-
-      // Replace the merged block with its two children
       const newBlocks = [...state.blocks];
       newBlocks.splice(idx, 1, ...block.root);
-
       return {
         blocks: newBlocks,
         selection: { numbers: [], operation: null },
@@ -102,81 +157,21 @@ function reducer(state, action) {
       };
     }
 
+    case ACTIONS.RESET:
+      return initState(initialNums);
+
     default:
       return state;
   }
 }
 
-/**
- * Helper to perform the calculation and return the next state.
- */
-function performCalculation(state, i1, i2, op) {
-  const b1 = state.blocks[i1];
-  const b2 = state.blocks[i2];
-  const v1 = parseFloat(b1.value);
-  const v2 = parseFloat(b2.value);
-
-  if (op === '/' && v2 === 0) {
-    return {
-      ...state,
-      selection: { numbers: [], operation: null },
-      error: 'Division by zero is not allowed.',
-    };
-  }
-
-  let result;
-  switch (op) {
-    case '+': result = v1 + v2; break;
-    case '-': result = v1 - v2; break;
-    case '*': result = v1 * v2; break;
-    case '/': result = v1 / v2; break;
-    case 'merge': result = parseFloat(`${v1.toString()}${v2.toString()}`); break;
-    default: return state;
-  }
-
-  const mergedBlock = {
-    id: `block-${Date.now()}-${Math.random()}`,
-    value: result.toString(),
-    root: [b1, b2],
-  };
-
-  const newBlocks = [...state.blocks];
-  const minIndex = Math.min(i1, i2);
-  newBlocks.splice(minIndex, 2, mergedBlock);
-
-  return {
-    blocks: newBlocks,
-    selection: { numbers: [], operation: null },
-    error: null,
-  };
-}
-
-/**
- * Level1 component
- */
-const Level1 = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const {
-    blocks,
-    selection: { numbers, operation },
-    error,
-  } = state;
-
-  const onNumberClick = (idx) => {
-    dispatch({ type: 'SELECT_NUMBER', payload: idx });
-  };
-
-  const onOperationClick = (op) => {
-    dispatch({ type: 'SELECT_OPERATION', payload: op });
-  };
-
-  const onRightClick = (e, idx) => {
-    e.preventDefault();
-    dispatch({ type: 'UNDO', payload: idx });
-  };
+/** The Level1 component */
+export default function Level1() {
+  const [state, dispatch] = useReducer(reducer, initialNums, initState);
+  const { blocks, selection: { numbers, operation }, error } = state;
 
   return (
-    <div className="puzzle-container">
+    <div className="puzzle-container" onClick={() => dispatch({ type: ACTIONS.CLEAR_ERROR })}>
       {error && (
         <div className="error-message" role="alert">
           {error}
@@ -184,33 +179,40 @@ const Level1 = () => {
       )}
 
       <div className="numbers">
-        {blocks.map((block, idx) => (
+        {blocks.map((blk, idx) => (
           <div
-            key={block.id}
+            key={blk.id}
             className={`number ${numbers.includes(idx) ? 'selected' : ''}`}
-            onClick={() => onNumberClick(idx)}
-            onContextMenu={(e) => onRightClick(e, idx)}
-            title={block.root ? 'Right-click to split' : ''}
+            onClick={() => dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx })}
+            onContextMenu={e => { e.preventDefault(); dispatch({ type: ACTIONS.UNDO, payload: idx }); }}
+            title={blk.root ? 'Right-click to split' : 'Click to select'}
           >
-            {block.value}
+            {blk.value}
           </div>
         ))}
       </div>
+
       <br></br>
+
       <div className="operations">
-        {['+', '-', '*', '/', 'merge'].map((op) => (
+        {OPS.map(op => (
           <button
             key={op}
-            type="button"
             className={`operation-button ${operation === op ? 'selected' : ''}`}
-            onClick={() => onOperationClick(op)}
+            onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
           >
-            {op}
+            {op === 'merge'
+  ? <img src={MergeIcon} alt="merge" style={{ width: 24, height: 24 }} />
+  : op} 
           </button>
         ))}
+        <button
+          className="reset-button"
+          onClick={() => dispatch({ type: ACTIONS.RESET })}
+        >
+          Reset
+        </button>
       </div>
     </div>
   );
-};
-
-export default React.memo(Level1);
+}
