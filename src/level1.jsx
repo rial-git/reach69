@@ -97,25 +97,20 @@ function reducer(state, { type, payload }) {
         if (numbers[0] === (idx)) {
           return {
             ...state, 
-            selection: {numbers: [1], operation: null},
+            selection: {numbers: [numbers[1]], operation: null},
             error:null,
           };
-        }
-
-        if (number[1] == (idx)) {
+        } 
+        
+        
+        if (numbers[1] === (idx)) {
           return { 
             ...state,
-            selection: {numbers: [0], operation:null},
+            selection: {numbers: [numbers[0]], operation:null},
             error:null,
           };
         }
-        
-        return {
-          ...state,
-          selection: { numbers: [idx], operation: null },
-          error: null,
-        };
-      }
+      } 
 
       // First pick
       if (numbers.length === 0) {
@@ -123,8 +118,12 @@ function reducer(state, { type, payload }) {
           ...state,
           selection: { numbers: [idx], operation: null },
           error: null,
+         
         };
+        
       }
+
+
 
       // Second pick
       if (numbers.length === 1) {
