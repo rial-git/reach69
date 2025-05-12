@@ -3,7 +3,7 @@ import MergeIcon from './assets/merge.svg';
 import './level1.css';
 
 /** Allowed operations, including “merge” */
-const OPS = ['+', '-', '*', '/', 'merge'];
+const OPS = ['+', '-', 'merge', '*', '/',];
 
 /** Initial digits (later replace with backend fetch) */
 const initialNums = [7, 1, 2, 0, 2];
@@ -40,8 +40,11 @@ function initState(nums) {
 
 /** Centralized calculation + merge logic */
 function calculateAndMerge(state, i1, i2, op) {
+  if (i1 > i2) [i1, i2] = [i2, i1]; 
+
   const { blocks } = state;
   const b1 = blocks[i1], b2 = blocks[i2];
+  console.log('b1:', b1, 'b2:', b2);
   const v1 = parseFloat(b1.value), v2 = parseFloat(b2.value);
 
   if (op === '/' && v2 === 0) {
@@ -57,6 +60,8 @@ function calculateAndMerge(state, i1, i2, op) {
     case 'merge':  result = parseFloat(`${b1.value}${b2.value}`); break;
     default:       return state;
   }
+
+
 
   const [leftChild, rightChild] = i1 < i2 ? [b1, b2] : [b2, b1];
   const merged = makeBlock(result, [leftChild, rightChild]);
@@ -78,6 +83,7 @@ function calculateAndMerge(state, i1, i2, op) {
 
 /** Reducer */
 function reducer(state, { type, payload }) {
+  console.log('state:', state)
   switch (type) {
     case ACTIONS.CLEAR_ERROR:
       return { ...state, error: null };
@@ -88,6 +94,22 @@ function reducer(state, { type, payload }) {
 
       // If user already has 2 numbers and no operation, start fresh with this click
       if (numbers.length === 2 && !operation) {
+        if (numbers[0] === (idx)) {
+          return {
+            ...state, 
+            selection: {numbers: [1], operation: null},
+            error:null,
+          };
+        }
+
+        if (number[1] == (idx)) {
+          return { 
+            ...state,
+            selection: {numbers: [0], operation:null},
+            error:null,
+          };
+        }
+        
         return {
           ...state,
           selection: { numbers: [idx], operation: null },
@@ -107,7 +129,11 @@ function reducer(state, { type, payload }) {
       // Second pick
       if (numbers.length === 1) {
         // clicking same block twice? ignore
-        if (numbers[0] === idx) return state;
+        if (numbers[0] === idx) { return  { 
+          ...state, selection: { numbers:[], operations: null },
+          error: null,
+        };
+      }
 
         // if we already chose an operation, do it immediately
         if (operation) {
