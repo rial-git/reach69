@@ -50,6 +50,11 @@ function calculateAndMerge(state, i1, i2, op) {
     return { ...state, error: 'Division by zero is not allowed.' };
   }
 
+
+  if (op === 'merge' && Math.abs(i1-i2) !== 1) {
+    return { ...state, error: 'Only adjacent blocks can be merged!' };
+  }
+
   let result;
   switch (op) {
     case '+':      result = v1 + v2; break;
@@ -195,9 +200,9 @@ export default function Level1() {
   const { blocks, selection: { numbers, operation }, error } = state;
 
   return (
-    <div className="puzzle-container" onClick={() => dispatch({ type: ACTIONS.CLEAR_ERROR })}>
+    <div className="puzzle-container" >
       {error && (
-        <div className="error-message" role="alert">
+        <div className="error-message" role="alert" onClick={() => dispatch({ type: ACTIONS.CLEAR_ERROR })}>
           {error}
         </div>
       )}
