@@ -18,14 +18,13 @@ const ACTIONS = {
 };
 
 /** Create a fresh Block with a UUID */
-function makeBlock(value, root = null) {
+function makeBlock(value, root = null, meta=null) {
   const obj =  {
     id: crypto.randomUUID(),
     value: String(value),
-    root,                 // either null or [blockA, blockB]
+    root, 
+    meta,
   };
-
-  console.log(obj);
   return obj;
 }
 
@@ -43,7 +42,6 @@ function calculateAndMerge(state, i1, i2, op) {
 
   const { blocks } = state;
   const b1 = blocks[i1], b2 = blocks[i2];
-  console.log('b1:', b1, 'b2:', b2);
   const v1 = parseFloat(b1.value), v2 = parseFloat(b2.value);
 
   if (op === '/' && v2 === 0) {
@@ -68,7 +66,9 @@ function calculateAndMerge(state, i1, i2, op) {
 
 
   const [leftChild, rightChild] = i1 < i2 ? [b1, b2] : [b2, b1];
-  const merged = makeBlock(result, [leftChild, rightChild]);
+  const gap = Math.abs((i1 - i2) + 1 );
+  console.log('gap=', gap)
+  const merged = makeBlock(result, [leftChild, rightChild], {gap});
   
  const removeSet = new Set([i1, i2]);
   const newBlocks = blocks
@@ -87,7 +87,6 @@ function calculateAndMerge(state, i1, i2, op) {
 
 /** Reducer */
 function reducer(state, { type, payload }) {
-  console.log('state:', state)
   switch (type) {
     case ACTIONS.CLEAR_ERROR:
       return { ...state, error: null };
@@ -174,11 +173,20 @@ function reducer(state, { type, payload }) {
     case ACTIONS.UNDO: {
       const idx = payload;
       const block = state.blocks[idx];
-      if (!block.root) {
+      console.log(block)
+      if (!block.root || !block.meta || typeof block.meta.gap !== 'number') {
         return { ...state, error: 'Nothing to undo here.' };
       }
       const newBlocks = [...state.blocks];
-      newBlocks.splice(idx, 1, ...block.root);
+      newBlocks.splice(idx, 1);
+
+      const [left, right] = block.root;
+      const insertAt = idx;
+      const rightInsertAt = insertAt + block.meta.gap; 
+
+      newBlocks.splice(rightInsertAt, 0, right);
+      newBlocks.splice(insertAt, 0, left);
+
       return {
         blocks: newBlocks,
         selection: { numbers: [], operation: null },
