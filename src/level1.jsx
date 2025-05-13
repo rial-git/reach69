@@ -40,7 +40,6 @@ function initState(nums) {
 
 /** Centralized calculation + merge logic */
 function calculateAndMerge(state, i1, i2, op) {
-  if (i1 > i2) [i1, i2] = [i2, i1]; 
 
   const { blocks } = state;
   const b1 = blocks[i1], b2 = blocks[i2];
@@ -57,7 +56,7 @@ function calculateAndMerge(state, i1, i2, op) {
     case '-':      result = v1 - v2; break;
     case '*':      result = v1 * v2; break;
     case '/':      result = v1 / v2; break;
-    case 'merge':  result = parseFloat(`${b1.value}${b2.value}`); break;
+    case 'merge':  result = parseFloat(`${blocks[Math.min(i1,i2)].value}${blocks[Math.max(i1,i2)].value}`); break;
     default:       return state;
   }
 
