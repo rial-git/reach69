@@ -52,20 +52,51 @@
   box-shadow: 0 0 10px #000000;
 }
 
+@keyframes mergeAnimation {
+  0% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+  }
+  30% {
+    transform: scale(0.95) rotate(-3deg);
+    background-color: #404040;
+  }
+  70% {
+    transform: scale(1.08) rotate(2deg);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    background-color: #202020;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #000000;
+  }
+}
+
 .number.merged {
-  background-color: #000000;
-  font-weight: bold;
-  color: white;
+  animation: mergeAnimation 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
+  z-index: 1;
+  /* Rest of your existing merged styles */
 }
 
 .number.merged::after {
-  content: '↺';
-  position: absolute;
-  bottom: 4px;
-  right: 6px;
-  font-size: 1rem;
-  opacity: 0.6;
+  animation: fadeInUndo 0.8s ease-out;
+}
+
+@keyframes fadeInUndo {
+  0% {
+    transform: translateY(8px) rotate(180deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0) rotate(10deg);
+    opacity: 0.6;
+  }
 }
 
 .operation-button {
