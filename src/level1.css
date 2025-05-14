@@ -105,3 +105,30 @@
 .operation-button.selected img {
   filter: invert(100%);
 }
+
+.undoable {
+  width: 3em;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  border: 2px solid transparent; /* Transparent border to allow gradient */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  background-color: #e0e0e0; /* Base background color */
+  /* Gradient border using background layers */
+  background-image: 
+    linear-gradient(#e0e0e0, #e0e0e0), /* Solid color fill */
+    linear-gradient(45deg, #3b3b3b, #c51c1c); /* Gradient border */
+  background-clip: padding-box, border-box; /* Clip layers to respective areas */
+  background-origin: border-box; /* Align background with border box */
+}
+
+.undoable:hover {
+  background-image: 
+    linear-gradient(#d0d0d0, #d0d0d0), /* Darker fill on hover */
+    linear-gradient(45deg, #3b3b3b, #c51c1c);
+}

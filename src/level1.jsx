@@ -219,7 +219,7 @@ export default function Level1() {
         {blocks.map((blk, idx) => (
           <div
             key={blk.id}
-            className={`number ${numbers.includes(idx) ? 'selected' : ''}`}
+            className={`number ${numbers.includes(idx) ? 'selected' : ''} ${blk.root ? 'undoable' : ''}`}
             onClick={() => dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx })}
             onContextMenu={e => { e.preventDefault(); dispatch({ type: ACTIONS.UNDO, payload: idx }); }}
             title={blk.root ? 'Right-click to split' : 'Click to select'}
