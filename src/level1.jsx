@@ -63,7 +63,7 @@ function calculateAndMerge(state, i1, i2, op) {
     default:       return state;
   }
 
-
+  result = Math.round(result * 100) / 100; 
 
   const [leftChild, rightChild] = i1 < i2 ? [b1, b2] : [b2, b1];
   const gap = Math.abs((i1 - i2) + 1 );
