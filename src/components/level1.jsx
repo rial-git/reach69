@@ -59,6 +59,14 @@ function calculateAndMerge(state, i1, i2, op) {
     case '-':      result = v1 - v2; break;
     case '*':      result = v1 * v2; break;
     case '/':      result = v1 / v2; break;
+    case '%':      result = v1 % v2; break;
+    case '^':      result = Math.pow(v1, v2); break;
+    case '√':      result = Math.sqrt(v1); break;
+    case 'log':    result = Math.log(v1); break;
+    case 'sin':    result = Math.sin(v1); break;
+    case 'cos':    result = Math.cos(v1); break;
+    case 'tan':    result = Math.tan(v1); break;
+    case '!':      result = 1; for (let i = 1; i <= v1; i++) { result *= i; } break;
     case 'merge':  result = parseFloat(`${blocks[Math.min(i1,i2)].value}${blocks[Math.max(i1,i2)].value}`); break;
     default:       return state;
   }
