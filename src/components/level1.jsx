@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
-import MergeIcon from './assets/merge.svg';
-import './level1.css';
+import MergeIcon from '../assets/merge.svg';
+import '../css/level1.css';
 
 /** Allowed operations, including “merge” */
 const OPS = ['+', '-', 'merge', '*', '/',];
