@@ -3,10 +3,10 @@ import MergeIcon from '../assets/merge.svg';
 import '../css/level1.css';
 
 /** Allowed operations, including “merge” */
-const OPS = ['+', '-', 'merge', '*', '/',];
+const OPS = ['+', '-', 'merge', '*', '/', '!', '%', '√', '^', 'log', 'sin', 'cos', 'tan'];
 
 /** Initial digits (later replace with backend fetch) */
-const initialNums = [7, 1, 2, 0, 2];
+const initialNums = [7, 1, 2, 0, 2,];
 
 /** Reducer actions */
 const ACTIONS = {
