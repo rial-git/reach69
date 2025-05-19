@@ -3,7 +3,7 @@ import MergeIcon from '../assets/merge.svg';
 import '../css/level1.css';
 
 /** Allowed operations, including “merge” */
-const OPS = ['+', '-', 'merge', '*', '/', '!', '%', '√', '^', 'log', 'sin', 'cos', 'tan'];
+const OPS = ['+', '-', 'merge', '*', '/', '√', '%', '!', '^'];
 
 /** Initial digits (later replace with backend fetch) */
 const initialNums = [7, 1, 2, 0, 2,];
@@ -76,7 +76,7 @@ function calculateAndMerge(state, i1, i2, op) {
   const [leftChild, rightChild] = i1 < i2 ? [b1, b2] : [b2, b1];
   const gap = Math.abs(i1 - i2) - 1;
   console.log('gap=', gap)
-  const merged = makeBlock(result, [leftChild, rightChild], {gap});
+  const merged = makeBlock(result, [leftChild, rightChild], {gap, operation: op});
   
  const removeSet = new Set([i1, i2]);
   const newBlocks = blocks
@@ -225,16 +225,23 @@ export default function Level1() {
 
       <div className="numbers">
         {blocks.map((blk, idx) => (
-          <div
-            key={blk.id}
-            className={`number ${numbers.includes(idx) ? 'selected' : ''} ${blk.root ? 'merged undoable' : ''}`}
-            onClick={() => dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx })}
-            onContextMenu={e => { e.preventDefault(); dispatch({ type: ACTIONS.UNDO, payload: idx }); }}
-            title={blk.root ? 'Right-click to split' : 'Click to select'}
-          >
-            {blk.value}
-          </div>
-        ))}
+  <div
+    key={blk.id}
+    className={`number ${numbers.includes(idx) ? 'selected' : ''} ${blk.root ? 'merged undoable' : ''}`}
+    onClick={() => dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx })}
+    onContextMenu={e => { e.preventDefault(); dispatch({ type: ACTIONS.UNDO, payload: idx }); }}
+    title={blk.root ? 'Right-click to split' : 'Click to select'}
+  >
+    {blk.value}
+    {blk.root && blk.meta?.operation && (
+      <div className="root-info">
+        {blk.root[0].value}
+        {blk.meta.operation === 'merge' ? ' ' : blk.meta.operation}
+        {blk.root[1].value}
+      </div>
+    )}
+  </div>
+))}
       </div>
 
       <br></br>

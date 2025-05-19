@@ -133,13 +133,13 @@
   margin-bottom: 1.5em;
 }
 
-.operation-button.selected img {
+operation-button.selected img {
   filter: invert(100%);
 }
 
 .undoable {
-  width: 3em;
-  height: 3em;
+  width: 4em;
+  height: 4em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,4 +162,22 @@
   background-image: 
     linear-gradient(#d0d0d0, #d0d0d0), /* Darker fill on hover */
     linear-gradient(45deg, #3b3b3b, #c51c1c);
+}
+
+/* Add to your CSS */
+.root-info {
+  font-size: 1rem;
+  color: #666;
+  position: absolute;
+  bottom: 2px;
+  line-height: 1;
+  opacity: 0.8;
+  letter-spacing: -0.5px;
+  transform: scale(0.9);
+  font-family: monospace;
+}
+
+.number {
+  position: relative; /* Add this to position root-info absolutely */
+  /* Keep existing number styles */
 }
