@@ -3,26 +3,28 @@ import MergeIcon from '../assets/merge.svg';
 import '../css/level1.css';
 
 /** Allowed operations, including “merge” */
-const OPS = ['+', '-', 'merge', '*', '/', '√', '%', '!', '^'];
+const basicOps = ['+', '-', 'merge', '*', '/',];
+const advancedTwoDigitOps = ['%', '^'];
+const advancedSingleDigitOps = ['√', '!'];
 
 /** Initial digits (later replace with backend fetch) */
 const initialNums = [7, 1, 2, 0, 2,];
 
 /** Reducer actions */
 const ACTIONS = {
-  PICK_NUMBER:    'PICK_NUMBER',
+  PICK_NUMBER: 'PICK_NUMBER',
   PICK_OPERATION: 'PICK_OPERATION',
-  UNDO:           'UNDO',
-  RESET:          'RESET',
-  CLEAR_ERROR:    'CLEAR_ERROR',
+  UNDO: 'UNDO',
+  RESET: 'RESET',
+  CLEAR_ERROR: 'CLEAR_ERROR',
 };
 
 /** Create a fresh Block with a UUID */
-function makeBlock(value, root = null, meta=null) {
-  const obj =  {
+function makeBlock(value, root = null, meta = null) {
+  const obj = {
     id: crypto.randomUUID(),
     value: String(value),
-    root, 
+    root,
     meta,
   };
   return obj;
@@ -49,36 +51,36 @@ function calculateAndMerge(state, i1, i2, op) {
   }
 
 
-  if (op === 'merge' && Math.abs(i1-i2) !== 1) {
+  if (op === 'merge' && Math.abs(i1 - i2) !== 1) {
     return { ...state, error: 'Only adjacent blocks can be merged!' };
   }
 
   let result;
   switch (op) {
-    case '+':      result = v1 + v2; break;
-    case '-':      result = v1 - v2; break;
-    case '*':      result = v1 * v2; break;
-    case '/':      result = v1 / v2; break;
-    case '%':      result = v1 % v2; break;
-    case '^':      result = Math.pow(v1, v2); break;
-    case '√':      result = Math.sqrt(v1); break;
-    case 'log':    result = Math.log(v1); break;
-    case 'sin':    result = Math.sin(v1); break;
-    case 'cos':    result = Math.cos(v1); break;
-    case 'tan':    result = Math.tan(v1); break;
-    case '!':      result = 1; for (let i = 1; i <= v1; i++) { result *= i; } break;
-    case 'merge':  result = parseFloat(`${blocks[Math.min(i1,i2)].value}${blocks[Math.max(i1,i2)].value}`); break;
-    default:       return state;
+    case '+': result = v1 + v2; break;
+    case '-': result = v1 - v2; break;
+    case '*': result = v1 * v2; break;
+    case '/': result = v1 / v2; break;
+    case '%': result = v1 % v2; break;
+    case '^': result = Math.pow(v1, v2); break;
+    case '√': result = Math.sqrt(v1); break;
+    case 'log': result = Math.log(v1); break;
+    case 'sin': result = Math.sin(v1); break;
+    case 'cos': result = Math.cos(v1); break;
+    case 'tan': result = Math.tan(v1); break;
+    case '!': result = 1; for (let i = 1; i <= v1; i++) { result *= i; } break;
+    case 'merge': result = parseFloat(`${blocks[Math.min(i1, i2)].value}${blocks[Math.max(i1, i2)].value}`); break;
+    default: return state;
   }
 
-  result = Math.round(result * 100) / 100; 
+  result = Math.round(result * 100) / 100;
 
   const [leftChild, rightChild] = i1 < i2 ? [b1, b2] : [b2, b1];
   const gap = Math.abs(i1 - i2) - 1;
   console.log('gap=', gap)
-  const merged = makeBlock(result, [leftChild, rightChild], {gap, operation: op});
-  
- const removeSet = new Set([i1, i2]);
+  const merged = makeBlock(result, [leftChild, rightChild], { gap, operation: op });
+
+  const removeSet = new Set([i1, i2]);
   const newBlocks = blocks
     .map((blk, idx) => ({ blk, idx }))
     .filter(({ idx }) => !removeSet.has(idx))
@@ -107,21 +109,21 @@ function reducer(state, { type, payload }) {
       if (numbers.length === 2 && !operation) {
         if (numbers[0] === (idx)) {
           return {
-            ...state, 
-            selection: {numbers: [numbers[1]], operation: null},
-            error:null,
-          };
-        } 
-        
-        
-        if (numbers[1] === (idx)) {
-          return { 
             ...state,
-            selection: {numbers: [numbers[0]], operation:null},
-            error:null,
+            selection: { numbers: [numbers[1]], operation: null },
+            error: null,
           };
         }
-      } 
+
+
+        if (numbers[1] === (idx)) {
+          return {
+            ...state,
+            selection: { numbers: [numbers[0]], operation: null },
+            error: null,
+          };
+        }
+      }
 
       // First pick
       if (numbers.length === 0) {
@@ -129,9 +131,9 @@ function reducer(state, { type, payload }) {
           ...state,
           selection: { numbers: [idx], operation: null },
           error: null,
-         
+
         };
-        
+
       }
 
 
@@ -139,11 +141,12 @@ function reducer(state, { type, payload }) {
       // Second pick
       if (numbers.length === 1) {
         // clicking same block twice? ignore
-        if (numbers[0] === idx) { return  { 
-          ...state, selection: { numbers:[], operations: null },
-          error: null,
-        };
-      }
+        if (numbers[0] === idx) {
+          return {
+            ...state, selection: { numbers: [], operations: null },
+            error: null,
+          };
+        }
 
         // if we already chose an operation, do it immediately
         if (operation) {
@@ -190,7 +193,7 @@ function reducer(state, { type, payload }) {
 
       const [left, right] = block.root;
       const insertAt = idx;
-      const rightInsertAt = insertAt + block.meta.gap; 
+      const rightInsertAt = insertAt + block.meta.gap;
 
       newBlocks.splice(rightInsertAt, 0, right);
       newBlocks.splice(insertAt, 0, left);
@@ -216,7 +219,7 @@ export default function Level1() {
   const { blocks, selection: { numbers, operation }, error } = state;
 
   return (
-    <div className="puzzle-container" >
+    <div className="puzzle" >
       {error && (
         <div className="error-message" role="alert" onClick={() => dispatch({ type: ACTIONS.CLEAR_ERROR })}>
           {error}
@@ -225,39 +228,68 @@ export default function Level1() {
 
       <div className="numbers">
         {blocks.map((blk, idx) => (
-  <div
-    key={blk.id}
-    className={`number ${numbers.includes(idx) ? 'selected' : ''} ${blk.root ? 'merged undoable' : ''}`}
-    onClick={() => dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx })}
-    onContextMenu={e => { e.preventDefault(); dispatch({ type: ACTIONS.UNDO, payload: idx }); }}
-    title={blk.root ? 'Right-click to split' : 'Click to select'}
-  >
-    {blk.value}
-    {blk.root && blk.meta?.operation && (
-      <div className="root-info">
-        {blk.root[0].value}
-        {blk.meta.operation === 'merge' ? ' ' : blk.meta.operation}
-        {blk.root[1].value}
-      </div>
-    )}
-  </div>
-))}
-      </div>
-
-      <br></br>
-
-      <div className="operations">
-        {OPS.map(op => (
-          <button
-            key={op}
-            className={`operation-button ${operation === op ? 'selected' : ''}`}
-            onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
+          <div
+            key={blk.id}
+            className={`number ${numbers.includes(idx) ? 'selected' : ''} ${blk.root ? 'merged undoable' : ''}`}
+            onClick={() => dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx })}
+            onContextMenu={e => { e.preventDefault(); dispatch({ type: ACTIONS.UNDO, payload: idx }); }}
+            title={blk.root ? 'Right-click to split' : 'Click to select'}
           >
-            {op === 'merge'
-  ? <img src={MergeIcon} alt="merge" style={{ width: 24, height: 24 }} />
-  : op} 
-          </button>
+            {blk.value}
+            {blk.root && blk.meta?.operation && (
+              <div className="root-info">
+                {blk.root[0].value}
+                {blk.meta.operation === 'merge' ? ' ' : blk.meta.operation}
+                {blk.root[1].value}
+              </div>
+            )}
+          </div>
         ))}
+      </div>
+      <div className="operations">
+
+        <div className="basic-operations">
+          {basicOps.map(op => (
+            <button
+              key={op}
+              className={`operation-button ${operation === op ? 'selected' : ''}`}
+              onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
+            >
+              {op === 'merge'
+                ? <img src={MergeIcon} alt="merge" style={{ width: 24, height: 24 }} />
+                : op}
+            </button>
+          ))}
+        </div>
+        
+        <div className="advanced-operations">
+          {/* Double-digit advanced operations */}
+          <div className="advanced-double-digit">
+            {advancedTwoDigitOps.map(op => (
+              <button
+                key={op}
+                className={`operation-button ${operation === op ? 'selected' : ''}`}
+                onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
+              >
+                {op}
+              </button>
+            ))}
+          </div>
+          {/* Single-digit advanced operations */}
+          <div className="advanced-single-digit">
+            {advancedSingleDigitOps.map(op => (
+              <button
+                key={op}
+                className={`operation-button ${operation === op ? 'selected' : ''}`}
+                onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
+              >
+                {op}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Reset button at the bottom */}
         <button
           className="reset-button"
           onClick={() => dispatch({ type: ACTIONS.RESET })}
