@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import MergeIcon from '../assets/merge.svg';
 import '../css/level1.css';
 
-/** Allowed operations, including “merge” */
+
 const basicOps = ['+', '-', 'merge', '*', '/',];
 const advancedTwoDigitOps = ['%', '^'];
 const advancedSingleDigitOps = ['√', '!'];
@@ -78,7 +78,9 @@ function calculateAndMerge(state, i1, i2, op) {
   const [leftChild, rightChild] = i1 < i2 ? [b1, b2] : [b2, b1];
   const gap = Math.abs(i1 - i2) - 1;
   console.log('gap=', gap)
-  const merged = makeBlock(result, [leftChild, rightChild], { gap, operation: op });
+  let infoOfRoot = `${v1} ${op == "merge" ? "&" : op } ${v2}`;
+  console.log('infoOfRoot=', infoOfRoot);
+  const merged = makeBlock(result, [leftChild, rightChild], { gap, infoOfRoot : infoOfRoot });
 
   const removeSet = new Set([i1, i2]);
   const newBlocks = blocks
@@ -236,11 +238,10 @@ export default function Level1() {
             title={blk.root ? 'Right-click to split' : 'Click to select'}
           >
             {blk.value}
-            {blk.root && blk.meta?.operation && (
+            {blk.root && (
               <div className="root-info">
-                {blk.root[0].value}
-                {blk.meta.operation === 'merge' ? ' ' : blk.meta.operation}
-                {blk.root[1].value}
+                {console.log(blk.meta.infoOfRoot)}
+                {blk.meta.infoOfRoot}
               </div>
             )}
           </div>
@@ -261,7 +262,7 @@ export default function Level1() {
             </button>
           ))}
         </div>
-        
+
         <div className="advanced-operations">
           {/* Double-digit advanced operations */}
           <div className="advanced-double-digit">
