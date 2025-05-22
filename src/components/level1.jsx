@@ -1,8 +1,9 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import MergeIcon from '../assets/merge.svg';
 import '../css/level1.css';
 import { singleDigitOp } from './singledigitops';
 import { makeBlock } from './utils';
+import { setupKeyboardShortcuts } from './keyboardhandler';
 
 
 const basicOps = ['+', '-', 'merge', '*', '/',];
@@ -223,6 +224,11 @@ function reducer(state, { type, payload }) {
 export default function Level1() {
   const [state, dispatch] = useReducer(reducer, initialNums, initState);
   const { blocks, selection: { numbers, operation }, error } = state;
+
+    useEffect(() => {
+    const cleanup = setupKeyboardShortcuts(dispatch, ACTIONS);
+    return cleanup;
+  }, []);
 
   return (
     <div className="puzzle" >
