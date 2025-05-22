@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import '../css/App.css';
 import Level1 from './level1'; // Import your Level1 component
+import { singleDigitOp } from './singledigitops'; // Import your singleDigitOp function
 
 function App() {
   const [count, setCount] = useState(0);

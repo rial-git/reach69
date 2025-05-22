@@ -1,6 +1,8 @@
 import React, { useReducer } from 'react';
 import MergeIcon from '../assets/merge.svg';
 import '../css/level1.css';
+import { singleDigitOp } from './singledigitops';
+import { makeBlock } from './utils';
 
 
 const basicOps = ['+', '-', 'merge', '*', '/',];
@@ -18,18 +20,6 @@ const ACTIONS = {
   RESET: 'RESET',
   CLEAR_ERROR: 'CLEAR_ERROR',
 };
-
-/** Create a fresh Block with a UUID */
-function makeBlock(value, root = null, meta = null) {
-  const obj = {
-    id: crypto.randomUUID(),
-    value: String(value),
-    root,
-    meta,
-  };
-  return obj;
-}
-
 /** Lazy initializer for useReducer */
 function initState(nums) {
   return {
@@ -63,15 +53,10 @@ function calculateAndMerge(state, i1, i2, op) {
     case '/': result = v1 / v2; break;
     case '%': result = v1 % v2; break;
     case '^': result = Math.pow(v1, v2); break;
-    case '√': result = Math.sqrt(v1); break;
-    case 'log': result = Math.log(v1); break;
-    case 'sin': result = Math.sin(v1); break;
-    case 'cos': result = Math.cos(v1); break;
-    case 'tan': result = Math.tan(v1); break;
-    case '!': result = 1; for (let i = 1; i <= v1; i++) { result *= i; } break;
     case 'merge': result = parseFloat(`${blocks[Math.min(i1, i2)].value}${blocks[Math.max(i1, i2)].value}`); break;
     default: return state;
   }
+
 
   result = Math.round(result * 100) / 100;
 
@@ -96,6 +81,7 @@ function calculateAndMerge(state, i1, i2, op) {
     error: null,
   };
 }
+
 
 /** Reducer */
 function reducer(state, { type, payload }) {
@@ -142,10 +128,9 @@ function reducer(state, { type, payload }) {
 
       // Second pick
       if (numbers.length === 1) {
-        // clicking same block twice? ignore
         if (numbers[0] === idx) {
           return {
-            ...state, selection: { numbers: [], operations: null },
+            ...state, selection: { numbers: [], operation: null },
             error: null,
           };
         }
@@ -170,10 +155,22 @@ function reducer(state, { type, payload }) {
       const op = payload;
       const { numbers } = state.selection;
 
+        if (advancedSingleDigitOps.includes(op)) {
+    if (numbers.length === 1) {
+      return singleDigitOp(state, numbers[0], op);
+    }
+    return { ...state, error: 'Select exactly one number for this operation.' };
+  }
+
+      if (advancedSingleDigitOps.includes(op) && numbers.length === 1) {
+      return calculateAndMerge(state, numbers[0], null, op);
+      }
+
+
       // if two numbers are already selected, calculate now
       if (numbers.length === 2) {
         return calculateAndMerge(state, numbers[0], numbers[1], op);
-      }
+      } 
 
       // otherwise just record the op
       return {
@@ -184,28 +181,35 @@ function reducer(state, { type, payload }) {
     }
 
     case ACTIONS.UNDO: {
-      const idx = payload;
-      const block = state.blocks[idx];
-      console.log(block)
-      if (!block.root || !block.meta || typeof block.meta.gap !== 'number') {
-        return { ...state, error: 'Nothing to undo here.' };
-      }
-      const newBlocks = [...state.blocks];
-      newBlocks.splice(idx, 1);
+  const idx = payload;
+  const block = state.blocks[idx];
+  if (!block.root || !block.meta) {
+    return { ...state, error: 'Nothing to undo here.' };
+  }
 
-      const [left, right] = block.root;
-      const insertAt = idx;
-      const rightInsertAt = insertAt + block.meta.gap;
+  const newBlocks = [...state.blocks];
+  newBlocks.splice(idx, 1); // Remove the current block
 
-      newBlocks.splice(rightInsertAt, 0, right);
-      newBlocks.splice(insertAt, 0, left);
+  if (block.root.length === 1) {
+    // Handle single root (from single-digit operations)
+    newBlocks.splice(idx, 0, ...block.root);
+  } else if (block.root.length === 2) {
+    // Handle two roots (from merge operations)
+    const [left, right] = block.root;
+    const gap = block.meta.gap;
+    const insertAt = Math.min(idx, idx + gap + 1);
+    newBlocks.splice(insertAt, 0, left);
+    newBlocks.splice(insertAt + gap + 1, 0, right);
+  } else {
+    return { ...state, error: 'Cannot undo this block.' };
+  }
 
-      return {
-        blocks: newBlocks,
-        selection: { numbers: [], operation: null },
-        error: null,
-      };
-    }
+  return {
+    blocks: newBlocks,
+    selection: { numbers: [], operation: null },
+    error: null,
+  };
+}
 
     case ACTIONS.RESET:
       return initState(initialNums);
