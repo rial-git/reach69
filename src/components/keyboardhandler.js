@@ -16,12 +16,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS) {
     const key = event.key;
     if (keyMap[key]) {
       dispatch({ type: ACTIONS.PICK_OPERATION, payload: keyMap[key] });
-
-    }
-    if (numMap[key]) {
-      dispatch({ type: ACTIONS.PICK_NUMBER, payload: numMap[key] });
-    }
-  }
+    }}
 
   window.addEventListener('keydown', handleKeyDown);
 

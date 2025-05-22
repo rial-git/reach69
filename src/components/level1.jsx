@@ -154,7 +154,15 @@ function reducer(state, { type, payload }) {
 
     case ACTIONS.PICK_OPERATION: {
       const op = payload;
-      const { numbers } = state.selection;
+      const { numbers, operation: currentOp } = state.selection;
+
+        if (currentOp === op) {
+    return {
+      ...state,
+      selection: { ...state.selection, operation: null },
+      error: null,
+    };
+  }
 
         if (advancedSingleDigitOps.includes(op)) {
     if (numbers.length === 1) {
