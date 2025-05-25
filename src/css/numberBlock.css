@@ -1,0 +1,115 @@
+.number {
+  width: 3em;
+  height: 3em;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  border: 2px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.number:hover {
+  background-color: #d0d0d0;
+}
+
+.number.selected {
+  border-color: #000000;
+  box-shadow: 0 0 10px #000000;
+}
+
+@keyframes mergeAnimation {
+  0% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+  }
+  30% {
+    transform: scale(0.95) rotate(-3deg);
+    background-color: #404040;
+  }
+  70% {
+    transform: scale(1.08) rotate(2deg);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    background-color: #202020;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: #000000;
+  }
+}
+
+.number.merged {
+  animation: mergeAnimation 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  z-index: 1;
+  /* Rest of your existing merged styles */
+}
+
+.number.merged::after {
+  animation: fadeInUndo 0.8s ease-out;
+}
+
+@keyframes fadeInUndo {
+  0% {
+    transform: translateY(8px) rotate(180deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(0) rotate(10deg);
+    opacity: 0.6;
+  }
+}
+
+.undoable {
+  width: 4em;
+  height: 4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  border: 2px solid transparent; /* Transparent border to allow gradient */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  background-color: #e0e0e0; /* Base background color */
+  /* Gradient border using background layers */
+  background-image: 
+    linear-gradient(#e0e0e0, #e0e0e0), /* Solid color fill */
+    linear-gradient(45deg, #3b3b3b, #c51c1c); /* Gradient border */
+  background-clip: padding-box, border-box; /* Clip layers to respective areas */
+  background-origin: border-box; /* Align background with border box */
+}
+
+.undoable:hover {
+  background-image: 
+    linear-gradient(#d0d0d0, #d0d0d0), /* Darker fill on hover */
+    linear-gradient(45deg, #3b3b3b, #c51c1c);
+}
+
+/* Add to your CSS */
+.root-info {
+  font-size: 1rem;
+  color: #666;
+  position: absolute;
+  bottom: 2px;
+  line-height: 1;
+  opacity: 0.8;
+  letter-spacing: -0.5px;
+  transform: scale(0.9);
+  font-family: monospace;
+}
+
+.number {
+  position: relative; /* Add this to position root-info absolutely */
+  /* Keep existing number styles */
+}

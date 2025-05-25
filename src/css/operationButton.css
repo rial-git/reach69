@@ -1,0 +1,41 @@
+.operation-button {
+  font-size: 1.5rem;
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 2px solid black;
+  color: #000;
+  margin: 0.5em;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 1.5em;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.operation-button:hover {
+  background-color: #f0f0f0;
+}
+
+.operation-button.selected {
+  background-color: #000;
+  color: white;
+  box-shadow: 0 0 10px #000;
+}
+
+.operation-button.selected img {
+  filter: invert(100%);
+}
+
+.operation-button img {
+  width: 1em;
+  height: 1em;
+  max-width: 20px;
+  max-height: 20px;
+}
