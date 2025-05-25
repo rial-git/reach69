@@ -1,5 +1,6 @@
 // components/Level1.jsx
 import React, { useReducer, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { reducer, initState } from './reducer';
 import { setupKeyboardShortcuts } from './keyboardhandler';
 import { ACTIONS, basicOps, advancedTwoDigitOps, advancedSingleDigitOps, initialNums } from '../utils/constants';
@@ -12,8 +13,10 @@ import '../css/level1.css';
 export default function Level1() {
   const [state, dispatch] = useReducer(reducer, initialNums, initState);
   const { blocks, selection: { numbers, operation }, error } = state;
-
   const blocksRef = useRef(blocks);
+  const navigate = useNavigate();
+
+
   useEffect(() => { blocksRef.current = blocks; }, [blocks]);
 
   useEffect(() => {
@@ -56,6 +59,7 @@ export default function Level1() {
           Reset
         </button>
       </div>
+      <button className="help-button" title="How to play?"  onClick={() => navigate('/howToPlay')}>?</button>
     </div>
   );
 }
