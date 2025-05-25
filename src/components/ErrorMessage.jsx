@@ -11,7 +11,7 @@ export default function ErrorMessage({ error, dispatch }) {
       const timer = setTimeout(() => {
         setShow(false);
         dispatch({ type: ACTIONS.CLEAR_ERROR });
-      }, 1000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [error, dispatch]);
