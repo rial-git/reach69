@@ -10,4 +10,4 @@ export const ACTIONS = {
 export const basicOps = ['+', '-', 'merge', '*', '/'];
 export const advancedTwoDigitOps = ['%', '^'];
 export const advancedSingleDigitOps = ['√', '!'];
-export const initialNums = [7, 2, 1, 0, 1];
+export const initialNums = [7, 1, 2, 0, 1];
