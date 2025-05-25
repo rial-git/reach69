@@ -16,23 +16,62 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef) {
     'Backspace': 'UNDO', // Backspace to undo
   };
 
-  function handleKeyDown(event) {
-    console.log('KeyDown event:', event.key);
-    const key = event.key;
-    const blocks = blocksRef.current;
-    if (keyMap[key]) {
-      dispatch({ type: ACTIONS.PICK_OPERATION, payload: keyMap[key] });
-      
-    } else if (/^[0-9]$/.test(key)) {
-      // Find the index of the block whose value matches the key pressed
-      const idx = blocks.findIndex(blk => String(blk.value) === key);
-      if (idx !== -1) {
-        dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx });
-      } else {
-        dispatch({ type: ACTIONS.SET_ERROR, payload: 'Please select a number available' });
+let lastKeyPressTime = 0;
+let lastKeyPressed = null;
+
+function handleKeyDown(event) {
+  const key = event.key;
+  const blocks = blocksRef.current;
+  const currentTime = Date.now();
+
+  if (keyMap[key]) {
+    dispatch({ type: ACTIONS.PICK_OPERATION, payload: keyMap[key] });
+    return;
+  }
+
+  if (/^[0-9]$/.test(key)) {
+    // If same key pressed again within 1 second, expand search
+    const isRepeat = key === lastKeyPressed && currentTime - lastKeyPressTime <= 1000;
+    lastKeyPressTime = currentTime;
+    lastKeyPressed = key;
+
+    let idx = blocks.findIndex(blk => !blk.root && String(blk.value) === key);
+
+    if (idx === -1 && isRepeat) {
+      // Expanded search if user presses the same key again within 1 sec
+      idx = blocks.findIndex(blk => String(blk.value).includes(key));
+    }
+
+    if (idx === -1) {
+      idx = blocks.findIndex(blk => !blk.root && String(blk.value).startsWith(key));
+    }
+
+    if (idx === -1) {
+      idx = blocks.findIndex(blk => blk.root && String(blk.value).startsWith(key));
+    }
+
+    if (idx !== -1) {
+      dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx });
+    } else {
+      // fallback logic
+      const lastSelectedIndex = blocksRef.lastSelectedIndex ?? -1;
+      const lastBlock = blocks[lastSelectedIndex];
+
+      if (
+        lastBlock &&
+        lastBlock.root &&
+        String(lastBlock.value).startsWith(key)
+      ) {
+        return; // silent skip
       }
+
+      dispatch({ type: ACTIONS.SET_ERROR, payload: 'Please select a number available' });
     }
   }
+}
+
+
+
 
   window.addEventListener('keydown', handleKeyDown);
 
