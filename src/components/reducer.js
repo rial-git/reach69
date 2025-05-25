@@ -6,7 +6,7 @@ import {
   ACTIONS,
   advancedSingleDigitOps,
   initialNums 
-} from './constants';
+} from '../utils/constants';
 
 
 export function initState(nums) { 
@@ -215,7 +215,10 @@ const { type, payload } = action;
     
         case ACTIONS.RESET:
           return initState(initialNums);
-    
+        
+        case ACTIONS.SET_ERROR:
+  return { ...state, error: action.payload };
+
         default:
           return state;
       }

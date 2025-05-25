@@ -2,7 +2,7 @@
 import React, { useReducer, useEffect, useRef } from 'react';
 import { reducer, initState } from './reducer';
 import { setupKeyboardShortcuts } from './keyboardhandler';
-import { ACTIONS, basicOps, advancedTwoDigitOps, advancedSingleDigitOps, initialNums } from './constants';
+import { ACTIONS, basicOps, advancedTwoDigitOps, advancedSingleDigitOps, initialNums } from '../utils/constants';
 import NumberBlock from './NumberBlock';
 import OperationButton from './OperationButton';
 import AdvancedOperations from './AdvancedOperations';

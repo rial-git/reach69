@@ -1,6 +1,6 @@
 // components/NumberBlock.jsx
 import React from 'react';
-import { ACTIONS } from './constants';
+import { ACTIONS } from '../utils/constants';
 
 export default function NumberBlock({ blk, idx, isSelected, dispatch }) {
   return (
