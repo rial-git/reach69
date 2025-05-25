@@ -1,8 +1,6 @@
-import { makeBlock } from './utils';
-
+import { makeBlock } from '../utils/utils';
 
 export function singleDigitOp(state, index, op) {
-
   const block = state.blocks[index];
   const value = parseFloat(block.value);
   let result, info;
@@ -12,14 +10,24 @@ export function singleDigitOp(state, index, op) {
       result = Math.sqrt(value);
       info = `√${value}`;
       break;
+
     case '!':
-      result = Array.from({length: value}, (_, i) => i+1).reduce((a,b) => a*b, 1);
+      if (value > 6 || value < 0 || !Number.isInteger(value)) {
+        return {
+          ...state,
+          error: 'Factorial only allowed for integers 0 to 6'
+        };
+      }
+      result = Array.from({ length: value }, (_, i) => i + 1)
+                    .reduce((a, b) => a * b, 1);
       info = `${value}!`;
       break;
+
     default: 
       return state;
   }
-  result = Math.round(result * 100) / 100
+
+  result = Math.round(result * 100) / 100;
 
   const newBlock = makeBlock(result, [block], { 
     gap: 0, 
@@ -27,7 +35,7 @@ export function singleDigitOp(state, index, op) {
   });
 
   const newBlocks = [...state.blocks];
-  newBlocks[index] = newBlock; // Replace the original block with the new block
+  newBlocks[index] = newBlock;
 
   return {
     blocks: newBlocks,
