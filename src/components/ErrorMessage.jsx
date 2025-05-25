@@ -1,6 +1,7 @@
 // components/ErrorMessage.jsx
 import React, { useEffect, useState } from 'react';
 import { ACTIONS } from '../utils/constants';
+import '../css/errorMessage.css'; 
 
 export default function ErrorMessage({ error, dispatch }) {
   const [show, setShow] = useState(false);
