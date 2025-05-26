@@ -59,7 +59,10 @@ export default function Level1() {
           Reset
         </button>
       </div>
-      <button className="help-button" title="How to play?"  onClick={() => navigate('/howToPlay')}>?</button>
+      <button className="help-button" onClick={() => navigate('/howToPlay')}>
+        ?
+        <span className="help-tooltip">How to play?</span>
+      </button>
     </div>
   );
 }

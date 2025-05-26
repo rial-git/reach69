@@ -18,7 +18,7 @@ function App() {
       <div className='btnRow'>
         <button type="button" id='logInBtn' className="btn btn-outline-dark">Log In</button>
         <button type="button" id='playBtn' className="btn btn-dark" onClick={() => navigate('/level1')}>Play</button>
-        <button type="button" id='modesBtn' className="btn btn-outline-dark" onClick={() => navigate('/howToPlay')}>Modes</button>
+        <button type="button" id='modesBtn' className="btn btn-outline-dark" >Modes</button>
       </div>
     </>
   );

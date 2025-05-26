@@ -12,8 +12,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef) {
     'm': 'merge',   // 'm' for merge (custom key)
     '!': '!',
     'r': '√',       // 'r' for root (√)
-    'Escape': 'RESET', // Escape key to reset
-    'Backspace': 'UNDO', // Backspace to undo
+      
   };
 
 let lastKeyPressTime = 0;
@@ -23,6 +22,31 @@ function handleKeyDown(event) {
   const key = event.key;
   const blocks = blocksRef.current;
   const currentTime = Date.now();
+
+
+  // for escape key to reset the state
+    if (key === 'Escape') {
+    dispatch({ type: ACTIONS.RESET });
+    return;
+  }
+
+
+
+// for backspace key to undo the last merged block
+if (key === 'Backspace') {
+  // Find the last merged block (assuming merged blocks have a .root property)
+  const lastMergedIdx = [...blocks]
+    .map((blk, idx) => ({ blk, idx }))
+    .reverse()
+    .find(({ blk }) => blk.root)?.idx;
+
+  if (typeof lastMergedIdx === 'number') {
+    dispatch({ type: ACTIONS.UNDO, payload: lastMergedIdx });
+  } else {
+    dispatch({ type: ACTIONS.SET_ERROR, payload: 'No merged block to undo.' });
+  }
+  return;
+}
 
   if (keyMap[key]) {
     dispatch({ type: ACTIONS.PICK_OPERATION, payload: keyMap[key] });
