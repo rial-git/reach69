@@ -161,7 +161,9 @@ const { type, payload } = action;
         if (numbers.length === 1) {
           return singleDigitOp(state, numbers[0], op);
         }
-        return { ...state, error: 'Select exactly one number for this operation.' };
+        else if (numbers.length === 2) {
+          return { ...state, error: 'Select exactly one number for this operation.' };
+        }
       }
     
           if (advancedSingleDigitOps.includes(op) && numbers.length === 1) {
