@@ -2,6 +2,8 @@
 import React, { useReducer, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reducer, initState } from './reducer';
+import { keyMap, opShortcuts } from '../utils/constants';
+
 import { setupKeyboardShortcuts } from './keyboardhandler';
 import { ACTIONS, basicOps, advancedTwoDigitOps, advancedSingleDigitOps, initialNums } from '../utils/constants';
 import NumberBlock from './NumberBlock';
@@ -10,24 +12,12 @@ import AdvancedOperations from './AdvancedOperations';
 import ErrorMessage from './ErrorMessage';
 import '../css/level1.css';
 
+
 export default function Level1() {
   const [state, dispatch] = useReducer(reducer, initialNums, initState);
   const { blocks, selection: { numbers, operation }, error } = state;
   const blocksRef = useRef(blocks);
   const navigate = useNavigate();
-  const keyMap = {
-    '+': '+',
-    '-': '-',
-    '*': '*',
-    '/': '/',
-    '%': '%',
-    '^': '^',
-    'merge': '.',   // 'm' for merge (custom key)
-    '!': '!',
-    '√': 'r',       // 'r' for root (√)
-      
-  };
-
 
   useEffect(() => { blocksRef.current = blocks; }, [blocks]);
 
@@ -48,15 +38,20 @@ export default function Level1() {
 
       <div className="operations">
         <div className="basic-operations">
-          {basicOps.map(op => (
+          {basicOps.map(op => {
+  console.log('op:', op, 'shortcut:', opShortcuts[op]);
+  return (
+    
             <OperationButton
               key={op}
               op={op}
-              shortcut={keyMap[op] || ''}
+              shortcut={opShortcuts[op] || ''}
               isSelected={operation === op}
               onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
+              
             />
-          ))}
+          );
+})}
         </div>
 
         <AdvancedOperations
@@ -65,7 +60,7 @@ export default function Level1() {
             singleDigit: advancedSingleDigitOps
           }}
           selectedOp={operation}
-          keyMap={keyMap}
+          keyMap={opShortcuts}
           onOperationSelect={(op) => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
         />
 

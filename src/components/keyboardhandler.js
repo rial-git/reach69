@@ -1,19 +1,9 @@
 import { ACTIONS } from '../utils/constants';
+import { keyMap } from '../utils/constants';
 
 // src/utils/keyboardHandler.js
 export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef) {
-  const keyMap = {
-    '+': '+',
-    '-': '-',
-    '*': '*',
-    '/': '/',
-    '%': '%',
-    '^': '^',
-    '.': 'merge',   // 'm' for merge (custom key)
-    '!': '!',
-    'r': '√',       // 'r' for root (√)
-      
-  };
+
 
 let lastKeyPressTime = 0;
 let lastKeyPressed = null;

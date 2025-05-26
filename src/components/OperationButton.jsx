@@ -7,7 +7,8 @@ export default function OperationButton({ op, shortcut, isSelected, onClick }) {
   return (
     <button className={`operation-button ${isSelected ? 'selected' : ''}`} onClick={onClick}>
       {op === 'merge' ? <img className="op-text" src={MergeIcon} alt="merge" /> : <span className="op-text">{op}</span>}
-      <span class="operation-button_badge">{shortcut}</span>
+    
+      <span className="operation-button_badge">{shortcut}</span>
     </button>
   );
 }
