@@ -107,6 +107,11 @@ const { type, payload } = action;
     
           // First pick
           if (numbers.length === 0) {
+
+            if (advancedSingleDigitOps.includes(state.selection.operation)) {
+              return singleDigitOp(state, idx, state.selection.operation);
+            }
+
             return {
               ...state,
               selection: { numbers: [idx], operation: state.selection.operation }, // <--- keep operation
