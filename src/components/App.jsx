@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import '../css/App.css';
 import Level1 from './level1';
 import HTP from './howToPlay';
+import Logo from '../assets/r69logo.png'; // Assuming you have a logo image
+console.log(Logo);
 
 
 function App() {
@@ -11,7 +13,7 @@ function App() {
 
   return (
     <>
-      <div className='logo'></div>
+      <img src={Logo} alt="Logo" className="logo" />
       <h1>Reach69.IO</h1>
       <h2>Reach 69 by creating equations with the given digits</h2>
 
