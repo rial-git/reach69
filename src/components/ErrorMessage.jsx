@@ -9,10 +9,12 @@ export default function ErrorMessage({ error, dispatch }) {
   useEffect(() => {
     if (error) {
       setShow(true);
+      // Dynamic timing: 2000ms base + 50ms per character, max 6000ms
+      const duration = Math.min(1000 + (error.length * 50), 6000);
       const timer = setTimeout(() => {
         setShow(false);
         dispatch({ type: ACTIONS.CLEAR_ERROR });
-      }, 3000);
+      }, duration);
       return () => clearTimeout(timer);
     }
   }, [error, dispatch]);
