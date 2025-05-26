@@ -17,6 +17,7 @@ export default function Level1() {
   const [state, dispatch] = useReducer(reducer, initialNums, initState);
   const { blocks, selection: { numbers, operation }, error } = state;
   const blocksRef = useRef(blocks);
+  const firstBlockRef = React.useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => { blocksRef.current = blocks; }, [blocks]);
@@ -32,7 +33,7 @@ export default function Level1() {
       
       <div className="numbers">
         {blocks.map((blk, idx) => (
-          <NumberBlock key={blk.id} blk={blk} idx={idx} isSelected={numbers.includes(idx)} dispatch={dispatch} />
+          <NumberBlock key={blk.id} blk={blk} idx={idx} isSelected={numbers.includes(idx)} dispatch={dispatch} ref={idx === 0 ? firstBlockRef : null }  />
         ))}
       </div>
 
