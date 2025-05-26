@@ -3,10 +3,11 @@ import React from 'react';
 import MergeIcon from '../assets/merge.svg';
 import '../css/operationButton.css';
 
-export default function OperationButton({ op, isSelected, onClick }) {
+export default function OperationButton({ op, shortcut, isSelected, onClick }) {
   return (
     <button className={`operation-button ${isSelected ? 'selected' : ''}`} onClick={onClick}>
-      {op === 'merge' ? <img src={MergeIcon} alt="merge" /> : <span className="op-text">{op}</span>}
+      {op === 'merge' ? <img className="op-text" src={MergeIcon} alt="merge" /> : <span className="op-text">{op}</span>}
+      <span class="operation-button_badge">{shortcut}</span>
     </button>
   );
 }
