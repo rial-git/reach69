@@ -9,7 +9,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef) {
     '/': '/',
     '%': '%',
     '^': '^',
-    'm': 'merge',   // 'm' for merge (custom key)
+    '.': 'merge',   // 'm' for merge (custom key)
     '!': '!',
     'r': '√',       // 'r' for root (√)
       

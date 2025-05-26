@@ -89,16 +89,14 @@ const { type, payload } = action;
     
           // If user already has 2 numbers and no operation, start fresh with this click
           if (numbers.length === 2 && !operation) {
-            if (numbers[0] === (idx)) {
+            if (numbers[0] === idx) {
               return {
                 ...state,
                 selection: { numbers: [numbers[1]], operation: null },
                 error: null,
               };
             }
-    
-    
-            if (numbers[1] === (idx)) {
+            if (numbers[1] === idx) {
               return {
                 ...state,
                 selection: { numbers: [numbers[0]], operation: null },
@@ -111,20 +109,16 @@ const { type, payload } = action;
           if (numbers.length === 0) {
             return {
               ...state,
-              selection: { numbers: [idx], operation: null },
+              selection: { numbers: [idx], operation: state.selection.operation }, // <--- keep operation
               error: null,
-    
             };
-    
           }
-    
-    
     
           // Second pick
           if (numbers.length === 1) {
             if (numbers[0] === idx) {
               return {
-                ...state, selection: { numbers: [], operation: null },
+                ...state, selection: { numbers: [], operation: state.selection.operation }, // <--- keep operation
                 error: null,
               };
             }
@@ -137,7 +131,7 @@ const { type, payload } = action;
             // otherwise just record the second number
             return {
               ...state,
-              selection: { numbers: [numbers[0], idx], operation: null },
+              selection: { numbers: [numbers[0], idx], operation: state.selection.operation }, // <--- keep operation
               error: null,
             };
           }
