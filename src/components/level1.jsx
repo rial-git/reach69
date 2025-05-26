@@ -39,7 +39,7 @@ export default function Level1() {
       <div className="operations">
         <div className="basic-operations">
           {basicOps.map(op => {
-  console.log('op:', op, 'shortcut:', opShortcuts[op]);
+
   return (
     
             <OperationButton
