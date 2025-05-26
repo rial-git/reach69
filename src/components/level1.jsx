@@ -15,6 +15,18 @@ export default function Level1() {
   const { blocks, selection: { numbers, operation }, error } = state;
   const blocksRef = useRef(blocks);
   const navigate = useNavigate();
+  const keyMap = {
+    '+': '+',
+    '-': '-',
+    '*': '*',
+    '/': '/',
+    '%': '%',
+    '^': '^',
+    'merge': '.',   // 'm' for merge (custom key)
+    '!': '!',
+    '√': 'r',       // 'r' for root (√)
+      
+  };
 
 
   useEffect(() => { blocksRef.current = blocks; }, [blocks]);
@@ -40,6 +52,7 @@ export default function Level1() {
             <OperationButton
               key={op}
               op={op}
+              shortcut={keyMap[op] || ''}
               isSelected={operation === op}
               onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
             />
@@ -52,6 +65,7 @@ export default function Level1() {
             singleDigit: advancedSingleDigitOps
           }}
           selectedOp={operation}
+          keyMap={keyMap}
           onOperationSelect={(op) => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
         />
 
