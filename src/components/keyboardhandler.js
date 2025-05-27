@@ -13,6 +13,15 @@ function handleKeyDown(event) {
   const blocks = blocksRef.current;
   const currentTime = Date.now();
 
+  // Prevent browser default for keys you want to capture
+  if (
+    keyMap[key] ||
+    key === 'Escape' ||
+    key === 'Backspace' ||
+    /^[0-9]$/.test(key)
+  ) {
+    event.preventDefault();
+  }
 
   // for escape key to reset the state
     if (key === 'Escape') {
