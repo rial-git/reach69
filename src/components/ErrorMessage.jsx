@@ -9,7 +9,7 @@ export default function ErrorMessage({ error, dispatch }) {
   useEffect(() => {
     if (error) {
       setShow(true);
-      // Dynamic timing: 2000ms base + 50ms per character, max 6000ms
+      // Dynamic timing: 1000ms base + 50ms per character, max 6000ms
       const duration = Math.min(1000 + (error.length * 50), 6000);
       const timer = setTimeout(() => {
         setShow(false);

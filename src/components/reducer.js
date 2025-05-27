@@ -53,7 +53,22 @@ function calculateAndMerge(state, i1, i2, op) {
   result = Math.round(result * 100) / 100;
 
   const [leftChild, rightChild] = i1 < i2 ? [b1, b2] : [b2, b1];
-  const gap = Math.abs(i1 - i2) - 1;
+  const [leftIdx, rightIdx] = i1 < i2 ? [i1, i2] : [i2, i1];
+  let gap = rightIdx - leftIdx - 1;
+
+  for (let idx = leftIdx + 1; idx < rightIdx; idx++) {
+    const blk = blocks[idx];
+    // If undoable, add the number of numbers in root to gap
+    function countLeaves(block) {
+      if (!block.root || block.root.length === 0) return 1;
+      return block.root.reduce((sum, child) => sum + countLeaves(child), 0);
+    }
+    if (blk.root && blk.meta) {
+      gap += countLeaves(blk) - 1; // Only add if undoable
+    }
+  }
+  
+
   let infoOfRoot = `${v1} ${op == "merge" ? "&" : op } ${v2}`;
   const merged = makeBlock(result, [leftChild, rightChild], { gap, infoOfRoot : infoOfRoot });
 

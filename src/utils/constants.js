@@ -21,7 +21,7 @@ export const keyMap = {
   '^': '^',
   '.': 'merge',
   '!': '!',
-  'r': '√',
+  'o': '√',
 };
 
 export const opShortcuts = Object.fromEntries(
