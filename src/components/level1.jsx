@@ -48,8 +48,9 @@ export default function Level1() {
 
   return (
     <div className="puzzle">
+      {error && (
       <ErrorMessage error={error} dispatch={dispatch} />
-
+      )}
       {/* Success Toast */}
       {isSuccess && (
         <div className="success-toast">
