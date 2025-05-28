@@ -14,7 +14,8 @@ import '../css/level1.css';
 
 
 export default function Level1() {
-  const [state, dispatch] = useReducer(reducer, initialNums, initState);
+  const [levelIndex, setLevelIndex] = React.useState(0);
+  const [state, dispatch] = useReducer(reducer, initialNums[levelIndex], initState);
   const { blocks, selection: { numbers, operation }, error } = state;
   const blocksRef = useRef(blocks);
   const firstBlockRef = React.useRef(null);
@@ -27,10 +28,35 @@ export default function Level1() {
     return cleanup;
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch({ type: ACTIONS.RESET, payload: initialNums[levelIndex] });
+  }, [levelIndex]);
+
+  // When pressing Next
+  const handleNext = () => {
+    if (levelIndex < initialNums.length - 1) {
+      const nextLevel = levelIndex + 1;
+      setLevelIndex(nextLevel);
+      dispatch({ type: ACTIONS.RESET, payload: initialNums[nextLevel] }); // <-- add this line
+    } else {
+      alert('All levels complete!');
+    }
+  };
+
+  // Success condition
+  const isSuccess = blocks.length === 1 && Number(blocks[0].value) === 69;
+
   return (
     <div className="puzzle">
       <ErrorMessage error={error} dispatch={dispatch} />
-      
+
+      {/* Success Toast */}
+      {isSuccess && (
+        <div className="success-toast">
+          <span>Success! 🎉</span>
+        </div>
+      )}
+
       <div className="numbers">
         {blocks.map((blk, idx) => (
           <NumberBlock key={blk.id} blk={blk} idx={idx} isSelected={numbers.includes(idx)} dispatch={dispatch} ref={idx === 0 ? firstBlockRef : null }  />
@@ -39,20 +65,15 @@ export default function Level1() {
 
       <div className="operations">
         <div className="basic-operations">
-          {basicOps.map(op => {
-
-  return (
-    
+          {basicOps.map(op => (
             <OperationButton
               key={op}
               op={op}
               shortcut={opShortcuts[op] || ''}
               isSelected={operation === op}
               onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
-              
             />
-          );
-})}
+          ))}
         </div>
 
         <AdvancedOperations
@@ -69,6 +90,14 @@ export default function Level1() {
           Reset
         </button>
       </div>
+
+      {/* Next Button */}
+      {isSuccess && (
+        <button className="next-button" onClick={handleNext}>
+          Next
+        </button>
+      )}
+
       <button className="help-button" onClick={() => navigate('/howToPlay')}>
         ?
         <span className="help-tooltip">How to play?</span>

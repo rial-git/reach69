@@ -230,7 +230,7 @@ const { type, payload } = action;
     }
     
         case ACTIONS.RESET:
-          return initState(initialNums);
+          return initState(payload || state.blocks.map(b => b.value));
         
         case ACTIONS.SET_ERROR:
   return { ...state, error: action.payload };

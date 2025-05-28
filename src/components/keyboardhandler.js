@@ -1,5 +1,4 @@
-import { ACTIONS } from '../utils/constants';
-import { keyMap } from '../utils/constants';
+import { ACTIONS, keyMap  } from '../utils/constants';
 
 // src/utils/keyboardHandler.js
 export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef) {
