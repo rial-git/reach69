@@ -1,7 +1,7 @@
 import { ACTIONS, keyMap  } from '../utils/constants';
 
 // src/utils/keyboardHandler.js
-export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef) {
+export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, handleNext) {
 
 
 let lastKeyPressTime = 0;
@@ -27,6 +27,14 @@ function handleKeyDown(event) {
     dispatch({ type: ACTIONS.RESET });
     return;
   }
+
+
+  // for enter key to trigger next action if success
+  if (event.key === 'Enter' && isSuccess && typeof handleNext === 'function') {
+      event.preventDefault();
+      handleNext();
+      return;
+    }
 
 
 

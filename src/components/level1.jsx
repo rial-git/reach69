@@ -20,31 +20,30 @@ export default function Level1() {
   const blocksRef = useRef(blocks);
   const firstBlockRef = React.useRef(null);
   const navigate = useNavigate();
+  const isSuccess = blocks.length === 1 && Number(blocks[0].value) === 69;
+  const handleNext = React.useCallback(() => {
+    if (levelIndex < initialNums.length - 1) {
+      const nextLevel = levelIndex + 1;
+      setLevelIndex(nextLevel);
+      dispatch({ type: ACTIONS.RESET, payload: initialNums[nextLevel] });
+    } else {
+      alert('All levels complete!');
+    }
+  }, [levelIndex, dispatch]);
 
   useEffect(() => { blocksRef.current = blocks; }, [blocks]);
 
   useEffect(() => {
-    const cleanup = setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef);
+    const cleanup = setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, handleNext );
     return cleanup;
-  }, [dispatch]);
+  }, [dispatch, isSuccess, handleNext]);
 
   useEffect(() => {
     dispatch({ type: ACTIONS.RESET, payload: initialNums[levelIndex] });
   }, [levelIndex]);
 
-  // When pressing Next
-  const handleNext = () => {
-    if (levelIndex < initialNums.length - 1) {
-      const nextLevel = levelIndex + 1;
-      setLevelIndex(nextLevel);
-      dispatch({ type: ACTIONS.RESET, payload: initialNums[nextLevel] }); // <-- add this line
-    } else {
-      alert('All levels complete!');
-    }
-  };
 
-  // Success condition
-  const isSuccess = blocks.length === 1 && Number(blocks[0].value) === 69;
+  
 
   return (
     <div className="puzzle">
