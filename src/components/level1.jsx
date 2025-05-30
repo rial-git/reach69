@@ -42,9 +42,9 @@ export default function Level1() {
     dispatch({ type: ACTIONS.RESET, payload: initialNums[levelIndex] });
   }, [levelIndex]);
 
-
+  const isInitialState = blocks.length === initialNums[levelIndex].length &&
+  blocks.every((blk, idx) => Number(blk.value) === initialNums[levelIndex][idx]);
   
-
   return (
     <div className="puzzle">
       {error && (
@@ -86,9 +86,11 @@ export default function Level1() {
           onOperationSelect={(op) => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
         />
 
-        <button className="reset-button" onClick={() => dispatch({ type: ACTIONS.RESET })}>
-          Reset
-        </button>
+        {!isInitialState && (
+          <button className="reset-button" onClick={() => dispatch({ type: ACTIONS.RESET, payload: initialNums[levelIndex] })}>
+            Reset
+          </button>
+        )}
       </div>
 
       {/* Next Button */}
