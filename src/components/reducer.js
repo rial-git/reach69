@@ -70,7 +70,7 @@ function calculateAndMerge(state, i1, i2, op) {
   
 
   let infoOfRoot = `${v1} ${op == "merge" ? "&" : op } ${v2}`;
-  const merged = makeBlock(result, [leftChild, rightChild], { gap, infoOfRoot : infoOfRoot });
+  const merged = makeBlock(result, [leftChild, rightChild], { gap, infoOfRoot : infoOfRoot, mergedTime: Date.now() });
 
   const removeSet = new Set([i1, i2]);
   const newBlocks = blocks

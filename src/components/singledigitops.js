@@ -31,7 +31,8 @@ export function singleDigitOp(state, index, op) {
 
   const newBlock = makeBlock(result, [block], { 
     gap: 0, 
-    infoOfRoot: info 
+    infoOfRoot: info,
+    mergedTime: Date.now() 
   });
 
   const newBlocks = [...state.blocks];

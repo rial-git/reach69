@@ -40,13 +40,12 @@ function handleKeyDown(event) {
 
 // for backspace key to undo the last merged block
 if (key === 'Backspace') {
-  // Find the last merged block (assuming merged blocks have a .root property)
-  const lastMergedIdx = [...blocks]
-    .map((blk, idx) => ({ blk, idx }))
-    .reverse()
-    .find(({ blk }) => blk.root)?.idx;
 
-  if (typeof lastMergedIdx === 'number') {
+  const maxMergedTime = Math.max(...blocks.map(blk => blk.meta?.mergedTime || 0));
+  const lastMergedIdx = [...blocks].findIndex(b => b.meta?.mergedTime === maxMergedTime);
+  console.log('lastMergedIdx', lastMergedIdx, blocks[lastMergedIdx]);
+  
+  if (lastMergedIdx >= 0) {
     dispatch({ type: ACTIONS.UNDO, payload: lastMergedIdx });
   } else {
     dispatch({ type: ACTIONS.SET_ERROR, payload: 'No merged block to undo.' });
