@@ -12,17 +12,15 @@ export const advancedTwoDigitOps = ['%', '^'];
 export const advancedSingleDigitOps = ['√', '!'];
 export const initialNums = 
 [ 
-[6,9],
+[7,1,2,0,2],
 [6,9,0],
 [6,9,0,0],
-
-
 ];
 
 
 
 export const keyMap = {
-  '+': '+',
+  '+': '+', 
   '-': '-',
   '*': '*',
   '/': '/',
