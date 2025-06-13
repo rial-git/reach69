@@ -5,16 +5,19 @@ import '../css/errorMessage.css';
 
 export default function ErrorMessage({ error, dispatch }) {
   const [show, setShow] = useState(false);
+  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
     if (error) {
       setShow(true);
       // Dynamic timing: 1000ms base + 50ms per character, max 6000ms
-      const duration = Math.min(1000 + (error.length * 50), 6000);
+    const d = Math.min(1000 + (error.length * 50), 6000);
+    setDuration(d);
+
       const timer = setTimeout(() => {
         setShow(false);
         dispatch({ type: ACTIONS.CLEAR_ERROR });
-      }, duration);
+      }, d);
       return () => clearTimeout(timer);
     }
   }, [error, dispatch]);
@@ -44,6 +47,11 @@ export default function ErrorMessage({ error, dispatch }) {
           ×
         </button>
       </div>
+      <div
+        className="error-progress"
+        style={{ animationDuration: `${duration}ms` }}
+        key={error}
+      />
     </div>
   );
 }
