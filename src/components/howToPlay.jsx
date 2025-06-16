@@ -1,29 +1,48 @@
 import React, { useState } from 'react';
 import '../css/howToPlay.css';
-import { rules, mouseControls, keyboardControls } from '../utils/howToPlay';
+import reach69logo from '../assets/r69logo.png';
+import { rules, mouseControls, keyboardControls } from '../utils/howToPlayInfo';
 
 export default function CheckoutPage() {
   const [activeTab, setActiveTab] = useState('controls');
 
   return (
     <div className="checkout-page">  
-          <div className="tab-title">
-            {activeTab === 'controls' ? 'CONTROLS TO' : 'RULES TO'}<br />
-          </div>
-          <div className="tab-buttons">
-            <button
-              className={activeTab === 'controls' ? 'active' : ''}
-              onClick={() => setActiveTab('controls')}
-            >
-              CONTROLS
-            </button>
-            <button
-              className={activeTab === 'rules' ? 'active' : ''}
-              onClick={() => setActiveTab('rules')}
-            >
-              RULES
-            </button>
-          </div>
+      <div className="tab-title">
+        {activeTab === 'controls' ? (
+          <>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
+              CONTROLS TO REACH
+              <img src={reach69logo} alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
+            </span>
+            <br />
+          </>
+        ) : (
+          <>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
+              RULES TO REACH
+              <img src={reach69logo} alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
+            </span>
+            <br />
+
+          </>
+          
+        )}
+      </div>
+      <div className="tab-buttons">
+        <button
+          className={activeTab === 'controls' ? 'active' : ''}
+          onClick={() => setActiveTab('controls')}
+        >
+          CONTROLS
+        </button>
+        <button
+          className={activeTab === 'rules' ? 'active' : ''}
+          onClick={() => setActiveTab('rules')}
+        >
+          RULES
+        </button>
+      </div>
 
 
       <div className="tab-content">
@@ -45,7 +64,7 @@ export default function CheckoutPage() {
               <div className="controls-list">
                 {keyboardControls.map((item, idx) => (
                   <div className="control-item" key={idx}>
-                    <img src={item.image} alt="Keyboard control" className="control-image" />
+                    <div className="control-image">{item.icon}</div>
                     <div className="control-text">{item.text}</div>
                   </div>
                 ))}

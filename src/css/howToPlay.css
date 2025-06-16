@@ -13,7 +13,7 @@
   flex-direction: column;
   background-color: #7d7d7d;
   color: black;
-  overflow: hidden;
+  overflow: hidden; /* keep this to prevent double scrollbars */
   margin: 0 !important;
   padding: 0 !important;
   font-family: monospace;
@@ -80,6 +80,8 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  overflow-y: auto;      /* <-- add this line */
+  max-height: 100vh;     /* <-- add this line */
 }
 
 /* Shared content styles */
@@ -90,7 +92,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;   /* <-- change from center to flex-start */
   overflow-y: auto;
 }
 
@@ -142,26 +144,27 @@
 
 .controls-section {
   margin-bottom: 2em;
+  width: 100%;               /* <-- ensure section takes full width */
 }
 
 .controls-heading {
   font-size: 1.3em;
   margin-bottom: 1em;
   color: #1976d2;
-  text-align: left;
+  text-align: left;          /* <-- ensure heading is left-aligned */
 }
 
 .controls-list {
   display: flex;
   flex-wrap: wrap;
   gap: 2em;
-  justify-content: flex-start;
+  justify-content: flex-start; /* <-- ensure items start from left */
 }
 
 .control-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;     /* <-- left-align icon and text */
   width: 180px;
   margin-bottom: 1.5em;
 }
@@ -175,6 +178,6 @@
 
 .control-text {
   font-size: 1em;
-  text-align: center;
+  text-align: left;           /* <-- left-align text */
   color: #333;
 }
