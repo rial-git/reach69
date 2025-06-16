@@ -134,20 +134,24 @@ const { type, payload } = action;
             };
           }
     
-          // Second pick or swap (keyboard: always swap selection)
+          // Second pick
           if (numbers.length === 1) {
             if (numbers[0] === idx) {
-              // Deselect if same number
               return {
-                ...state,
-                selection: { numbers: [], operation: state.selection.operation },
+                ...state, selection: { numbers: [], operation: state.selection.operation }, // <--- keep operation
                 error: null,
               };
             }
-            // Always swap to the new number (keyboard behavior)
+    
+            // if we already chose an operation, do it immediately
+            if (operation) {
+              return calculateAndMerge(state, numbers[0], idx, operation);
+            }
+    
+            // otherwise just record the second number
             return {
               ...state,
-              selection: { numbers: [idx], operation: state.selection.operation },
+              selection: { numbers: [numbers[0], idx], operation: state.selection.operation }, // <--- keep operation
               error: null,
             };
           }
