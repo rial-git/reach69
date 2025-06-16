@@ -134,24 +134,20 @@ const { type, payload } = action;
             };
           }
     
-          // Second pick
+          // Second pick or swap (keyboard: always swap selection)
           if (numbers.length === 1) {
             if (numbers[0] === idx) {
+              // Deselect if same number
               return {
-                ...state, selection: { numbers: [], operation: state.selection.operation }, // <--- keep operation
+                ...state,
+                selection: { numbers: [], operation: state.selection.operation },
                 error: null,
               };
             }
-    
-            // if we already chose an operation, do it immediately
-            if (operation) {
-              return calculateAndMerge(state, numbers[0], idx, operation);
-            }
-    
-            // otherwise just record the second number
+            // Always swap to the new number (keyboard behavior)
             return {
               ...state,
-              selection: { numbers: [numbers[0], idx], operation: state.selection.operation }, // <--- keep operation
+              selection: { numbers: [idx], operation: state.selection.operation },
               error: null,
             };
           }
@@ -233,7 +229,18 @@ const { type, payload } = action;
           return initState(payload || state.blocks.map(b => b.value));
         
         case ACTIONS.SET_ERROR:
-  return { ...state, error: action.payload };
+  return { ...state, error: typeof action.payload === 'string' ? action.payload : JSON.stringify(action.payload) };
+        case ACTIONS.CLEAR_SELECTION:
+  if (action.payload?.type === 'numbers') {
+    return {
+      ...state,
+      selection: {
+        ...state.selection,
+        numbers: []
+      }
+    };
+  }
+  return state;
 
         default:
           return state;

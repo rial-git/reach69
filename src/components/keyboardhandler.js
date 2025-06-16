@@ -6,6 +6,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
 
 let lastKeyPressTime = 0;
 let lastKeyPressed = null;
+let lastKeyCycleIndices = {}; // Store cycling state for each key
 
 function handleKeyDown(event) {
   const key = event.key;
@@ -59,43 +60,34 @@ if (key === 'Backspace') {
   }
 
   if (/^[0-9]$/.test(key)) {
-    // If same key pressed again within 1 second, expand search
-    const isRepeat = key === lastKeyPressed && currentTime - lastKeyPressTime <= 1000;
+    // Find all indices that match the key
+    const matchingIndices = blocks
+      .map((blk, idx) => (!blk.root && String(blk.value).startsWith(key) ? idx : -1))
+      .filter(idx => idx !== -1);
+
+    if (matchingIndices.length === 0) {
+      dispatch({ type: ACTIONS.SET_ERROR, payload: 'Please select a number available' });
+      return;
+    }
+
+    // Cycle through matches if key is pressed repeatedly within 1 second
+    if (key === lastKeyPressed && currentTime - lastKeyPressTime <= 1000) {
+      lastKeyCycleIndices[key] = (lastKeyCycleIndices[key] + 1) % matchingIndices.length;
+    } else {
+      lastKeyCycleIndices[key] = 0;
+    }
+
     lastKeyPressTime = currentTime;
     lastKeyPressed = key;
 
-    let idx = blocks.findIndex(blk => !blk.root && String(blk.value) === key);
+    const idx = matchingIndices[lastKeyCycleIndices[key]];
 
-    if (idx === -1 && isRepeat) {
-      // Expanded search if user presses the same key again within 1 sec
-      idx = blocks.findIndex(blk => String(blk.value).includes(key));
-    }
-
-    if (idx === -1) {
-      idx = blocks.findIndex(blk => !blk.root && String(blk.value).startsWith(key));
-    }
-
-    if (idx === -1) {
-      idx = blocks.findIndex(blk => blk.root && String(blk.value).startsWith(key));
-    }
-
-    if (idx !== -1) {
+    // Deselect all selected numbers before selecting the new one (swap)
+    dispatch({ type: ACTIONS.CLEAR_SELECTION, payload: { type: 'numbers' } });
+    setTimeout(() => {
       dispatch({ type: ACTIONS.PICK_NUMBER, payload: idx });
-    } else {
-      // fallback logic
-      const lastSelectedIndex = blocksRef.lastSelectedIndex ?? -1;
-      const lastBlock = blocks[lastSelectedIndex];
-
-      if (
-        lastBlock &&
-        lastBlock.root &&
-        String(lastBlock.value).startsWith(key)
-      ) {
-        return; // silent skip
-      }
-
-      dispatch({ type: ACTIONS.SET_ERROR, payload: 'Please select a number available' });
-    }
+    }, 0);
+    return;
   }
 }
 
