@@ -29,7 +29,7 @@ const levelsByDifficulty = {
   hard: initialNumsHard
 };
 
-const CONFETTI_DURATION = 2500; // Duration in milliseconds
+const CONFETTI_DURATION = 2000; // Duration in milliseconds
 
 export default function Level1() {
   const navigate = useNavigate();
