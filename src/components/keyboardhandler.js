@@ -54,7 +54,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
     if (/^[0-9]$/.test(key)) {
       // 1. Try cycling through exact matches
       const matchingIndices = blocks
-        .map((blk, idx) => (!blk.root && String(blk.value) === key ? idx : -1))
+        .map((blk, idx) => (String(blk.value).includes(key) ? idx : -1))
         .filter(idx => idx !== -1);
 
       if (matchingIndices.length > 0) {

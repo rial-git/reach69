@@ -118,6 +118,8 @@ const { type, payload } = action;
                 error: null,
               };
             }
+
+            return { ...state, error: 'Cannot select anymore numbers' };
           }
     
           // First pick
