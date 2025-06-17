@@ -119,57 +119,58 @@ export default function Level1() {
   }, [dispatch, isSuccess, handleNext]);
 
   return (
-    <div className="puzzle">
-      {error && (
-        <ErrorMessage error={error} dispatch={dispatch} />
-      )}
-
+    <>
       {showConfetti && <ConfettiEffect />}
+      <div className="puzzle">
+        {error && (
+          <ErrorMessage error={error} dispatch={dispatch} />
+        )}
 
-      <div className="numbers">
-        {blocks.map((blk, idx) => (
-          <NumberBlock 
-            key={blk.id} 
-            blk={blk} 
-            idx={idx} 
-            isSelected={numbers.includes(idx)} 
-            dispatch={dispatch} 
-          />
-        ))}
-      </div>
-
-      <div className="operations">
-        <div className="basic-operations">
-          {basicOps.map(op => (
-            <OperationButton
-              key={op}
-              op={op}
-              shortcut={opShortcuts[op] || ''}
-              isSelected={operation === op}
-              onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
+        <div className="numbers">
+          {blocks.map((blk, idx) => (
+            <NumberBlock 
+              key={blk.id} 
+              blk={blk} 
+              idx={idx} 
+              isSelected={numbers.includes(idx)} 
+              dispatch={dispatch} 
             />
           ))}
         </div>
 
-        <AdvancedOperations
-          ops={{
-            doubleDigit: advancedTwoDigitOps,
-            singleDigit: advancedSingleDigitOps
-          }}
-          selectedOp={operation}
-          keyMap={opShortcuts}
-          onOperationSelect={(op) => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
-        />
+        <div className="operations">
+          <div className="basic-operations">
+            {basicOps.map(op => (
+              <OperationButton
+                key={op}
+                op={op}
+                shortcut={opShortcuts[op] || ''}
+                isSelected={operation === op}
+                onClick={() => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
+              />
+            ))}
+          </div>
 
-        <button className="reset-button" onClick={() => dispatch({ type: ACTIONS.RESET, payload: currentLevelData })}>
-          Reset
+          <AdvancedOperations
+            ops={{
+              doubleDigit: advancedTwoDigitOps,
+              singleDigit: advancedSingleDigitOps
+            }}
+            selectedOp={operation}
+            keyMap={opShortcuts}
+            onOperationSelect={(op) => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
+          />
+
+          <button className="reset-button" onClick={() => dispatch({ type: ACTIONS.RESET, payload: currentLevelData })}>
+            Reset
+          </button>
+        </div>
+
+        <button className="help-button" onClick={() => navigate('/howToPlay')}>
+          ?
+          <span className="help-tooltip">How to play?</span>
         </button>
       </div>
-
-      <button className="help-button" onClick={() => navigate('/howToPlay')}>
-        ?
-        <span className="help-tooltip">How to play?</span>
-      </button>
-    </div>
+    </>
   );
 }
