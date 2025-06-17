@@ -29,7 +29,7 @@ export const keyMap = {
   '^': '^',
   '.': 'merge',
   '!': '!',
-  'o': '√',
+  'r': '√',
 };
 
 export const opShortcuts = Object.fromEntries(

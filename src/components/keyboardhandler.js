@@ -13,10 +13,12 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
 
     // Prevent browser default for keys you want to capture
     if (
+       (
       keyMap[key] ||
       key === 'Escape' ||
       key === 'Backspace' ||
-      /^[0-9]$/.test(key)
+      /^[0-9]$/.test(key) 
+    ) && !event.ctrlKey && !event.altKey && !event.shiftKey 
     ) {
       event.preventDefault();
     }
