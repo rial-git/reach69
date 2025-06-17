@@ -20,10 +20,19 @@ function App() {
       <h2>Reach 69 by creating equations with the given digits</h2>
 
       <div className='btnRow'>
+        <div> 
         <button type="button" id='logInBtn' className="btn btn-outline-dark">Log In</button>
+        <div className="coming-soon">Coming soon!</div> 
+        </div>
+
         <button type="button" id='playBtn' className="btn btn-dark" onClick={() => navigate('/level1')}>Play</button>
+
+        <div>
         <button type="button" id='modesBtn' className="btn btn-outline-dark" >Modes</button>
+        <div className="coming-soon">Coming soon!</div>
+        </div>
       </div>
+
     </>
   );
 }
