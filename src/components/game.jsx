@@ -8,10 +8,11 @@ import {
   basicOps, 
   opShortcuts, 
   advancedTwoDigitOps, 
-  advancedSingleDigitOps, 
+  advancedSingleDigitOps,
   initialNumsEasy, 
   initialNumsMedium, 
-  initialNumsHard 
+  initialNumsHard, 
+  initialNumsImpossible
 } from '../utils/constants';
 import { shuffle } from '../utils/gameHelpers';
 import NumberBlock from './NumberBlock';
@@ -19,14 +20,16 @@ import OperationButton from './OperationButton';
 import AdvancedOperations from './AdvancedOperations';
 import ErrorMessage from './ErrorMessage';
 import { setupKeyboardShortcuts } from './keyboardhandler';
-import '../css/level1.css';
+import '../css/game.css';
 import ConfettiEffect from './confetti.jsx';
 
-const difficulties = ['easy', 'med', 'hard'];
+const difficulties = ['easy', 'med', 'hard', 'impossible'];
 const levelsByDifficulty = {
   easy: initialNumsEasy,
   med: initialNumsMedium,
-  hard: initialNumsHard
+  hard: initialNumsHard,
+  impossible: initialNumsImpossible
+  
 };
 
 const CONFETTI_DURATION = 2000; // Duration in milliseconds
@@ -51,6 +54,9 @@ export default function Level1() {
   const isSuccess = blocks.length === 1 && Number(blocks[0].value) === 69;
   const [showConfetti, setShowConfetti] = useState(false);
   const confettiTimeout = useRef(null);
+
+  // NEW state for level complete pop-up
+  const [showLevelComplete, setShowLevelComplete] = useState(false);
 
   // Handle advancing to next level
   const handleNext = useCallback(() => {
@@ -118,10 +124,28 @@ export default function Level1() {
     return cleanup;
   }, [dispatch, isSuccess, handleNext]);
 
+  // When currentLevelIdx changes (and is NOT the first level), trigger the pop-up.
+  useEffect(() => {
+    if (currentLevelIdx > 0) {
+      setShowLevelComplete(true);
+      const timer = setTimeout(() => {
+        setShowLevelComplete(false);
+      }, 1500); // pop-up visible for 4000ms (4 seconds)
+      return () => clearTimeout(timer);
+    }
+  }, [currentLevelIdx]);
+
   return (
     <>
       {showConfetti && <ConfettiEffect />}
       <div className="puzzle">
+        {/* Render the "Level Complete" pop-up if active */}
+        {showLevelComplete && (
+          <div className="level-complete-popup">
+            Level Complete!
+          </div>
+        )}
+
         {error && (
           <ErrorMessage error={error} dispatch={dispatch} />
         )}

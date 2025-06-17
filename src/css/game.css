@@ -126,3 +126,25 @@
   transform: translateX(-50%);
   z-index: 200;
 }
+
+.level-complete-popup {
+  position: fixed;
+  bottom: 2%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 2rem;
+  background: transparent;
+  color: #129001;
+  border-radius: 8px;
+  z-index: 9999;
+  text-align: center;
+  font-size: 1 rem;
+  animation: fadeInOut 1 ease;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
