@@ -1,8 +1,9 @@
 // components/Level1.jsx
-import React, { useReducer, useEffect, useRef } from 'react';
+import React, { useReducer, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reducer, initState } from './reducer';
 import { keyMap, opShortcuts } from '../utils/constants';
+import Confetti from 'react-confetti';
 
 import { setupKeyboardShortcuts } from './keyboardhandler';
 import { ACTIONS, basicOps, advancedTwoDigitOps, advancedSingleDigitOps, initialNums } from '../utils/constants';
@@ -14,7 +15,7 @@ import '../css/level1.css';
 
 
 export default function Level1() {
-  const [levelIndex, setLevelIndex] = React.useState(0);
+  const [levelIndex, setLevelIndex] = useState(0);
   const [state, dispatch] = useReducer(reducer, initialNums[levelIndex], initState);
   const { blocks, selection: { numbers, operation }, error } = state;
   const blocksRef = useRef(blocks);
@@ -30,6 +31,13 @@ export default function Level1() {
       alert('All levels complete!');
     }
   }, [levelIndex, dispatch]);
+  const [didConfetti, setDidConfetti] = useState(false);
+
+//   useEffect(() => {
+//   if (isSuccess && !didConfetti) {
+//     setDidConfetti(true);
+//   }
+// }, [isSuccess, didConfetti]);
 
   useEffect(() => { blocksRef.current = blocks; }, [blocks]);
 
@@ -39,6 +47,7 @@ export default function Level1() {
   }, [dispatch, isSuccess, handleNext]);
 
   useEffect(() => {
+
     dispatch({ type: ACTIONS.RESET, payload: initialNums[levelIndex] });
   }, [levelIndex]);
 
@@ -51,6 +60,14 @@ export default function Level1() {
       <ErrorMessage error={error} dispatch={dispatch} />
       )}
       {/* Success Toast */}
+      {isSuccess && !didConfetti && (
+        <Confetti
+          recycle={false}          // only one burst
+          numberOfPieces={300}
+          gravity={0.75}
+        />
+      )}
+
       {isSuccess && (
         <div className="success-toast">
           <span>Success! 🎉</span>
