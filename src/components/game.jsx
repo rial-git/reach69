@@ -146,7 +146,15 @@ export default function Level1() {
       )}
 
       {showConfetti && (
-        <Confetti recycle={false} numberOfPieces={300} gravity={0.75} />
+        <Confetti
+          recycle={false}
+          numberOfPieces={300}
+          // Adjust gravity so pieces fall faster or slower as needed.
+          gravity={1.25}
+          // Ensure the confetti covers the full viewport.
+          width={window.innerWidth}
+          height={window.innerHeight}
+        />
       )}
 
       <div className="numbers">
