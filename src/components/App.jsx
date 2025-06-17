@@ -26,8 +26,10 @@ function App() {
         <div className="coming-soon">Coming soon!</div> 
         </div>
 
+        <div>
         <button type="button" id='playBtn' className="btn btn-dark" onClick={() => navigate('/level1')}>Play</button>
-
+        <div className="coming-soon">.</div>
+        </div>
         <div>
         <button type="button" id='modesBtn' className="btn btn-outline-dark" >Modes</button>
         <div className="coming-soon">Coming soon!</div>

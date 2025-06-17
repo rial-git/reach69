@@ -8,7 +8,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
 
   function handleKeyDown(event) {
 
-  if (event.ctrlKey || event.altKey || event.shiftKey) {
+  if (event.ctrlKey || event.altKey) {
   return;
   }
 
