@@ -29,6 +29,8 @@ const levelsByDifficulty = {
   hard: initialNumsHard
 };
 
+const CONFETTI_DURATION = 2500; // Duration in milliseconds
+
 export default function Level1() {
   const navigate = useNavigate();
   
@@ -47,16 +49,19 @@ export default function Level1() {
   const blocksRef = useRef(blocks);
 
   const isSuccess = blocks.length === 1 && Number(blocks[0].value) === 69;
+  const [showConfetti, setShowConfetti] = useState(false); // NEW - state to control confetti
+  const [triggerConfetti, setTriggerConfetti] = useState(false); // New state to flag that confetti should show in the new level
 
   // handleNext advances through levels; when done with current difficulty, moves to the next.
   const handleNext = useCallback(() => {
     if (currentLevelIdx < order.length - 1) {
+      // Advance to next level for current difficulty.
       const nextLevelIdx = currentLevelIdx + 1;
       setCurrentLevelIdx(nextLevelIdx);
       const nextLevelData = levelsByDifficulty[difficulty][order[nextLevelIdx]];
       dispatch({ type: ACTIONS.RESET, payload: nextLevelData });
     } else {
-      // Completed all levels in the current difficulty - move to the next difficulty.
+      // Completed all levels in current difficulty—move to the next difficulty.
       const currentDifficultyIndex = difficulties.indexOf(difficulty);
       if (currentDifficultyIndex < difficulties.length - 1) {
         const newDifficulty = difficulties[currentDifficultyIndex + 1];
@@ -67,19 +72,63 @@ export default function Level1() {
         dispatch({ type: ACTIONS.RESET, payload: levelsByDifficulty[newDifficulty][newOrder[0]] });
       } else {
         navigate('/gameover');
+        return;
       }
     }
-  }, [currentLevelIdx, order, difficulty, navigate]);
+
+    // After advancing to the new level, show confetti for the given duration.
+    setShowConfetti(true);
+    setTimeout(() => {
+      setShowConfetti(false);
+    }, CONFETTI_DURATION);
+  }, [currentLevelIdx, order, difficulty, navigate, dispatch]);
 
   useEffect(() => {
     blocksRef.current = blocks;
   }, [blocks]);
 
+  // Show confetti for 0.5 sec when success is reached, then advance level.
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && currentLevelIdx !== 0) {
+      console.log('Showing confetti for duration:', CONFETTI_DURATION);
+      setShowConfetti(true);
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+        handleNext();
+      }, CONFETTI_DURATION);
+      return () => clearTimeout(timer);
+    } else if (isSuccess) {
       handleNext();
     }
-  }, [isSuccess, handleNext]);
+  }, [isSuccess, handleNext, currentLevelIdx]);
+
+  // When the triggerConfetti flag is set (i.e. new level loaded), show confetti.
+  useEffect(() => {
+    if (triggerConfetti) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+        setTriggerConfetti(false);
+      }, CONFETTI_DURATION);
+      return () => clearTimeout(timer);
+    }
+  }, [triggerConfetti]);
+
+  // Also ensure confetti is disabled when new level data arrives.
+  useEffect(() => {
+    setShowConfetti(false);
+  }, [currentLevelData]);
+
+  // When currentLevelData changes and level index > 0, show confetti on level load.
+  useEffect(() => {
+    if (currentLevelIdx > 0) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => {
+        setShowConfetti(false);
+      }, CONFETTI_DURATION);
+      return () => clearTimeout(timer);
+    }
+  }, [currentLevelData, currentLevelIdx]);
 
   useEffect(() => {
     const cleanup = setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, handleNext);
@@ -96,12 +145,8 @@ export default function Level1() {
         <ErrorMessage error={error} dispatch={dispatch} />
       )}
 
-      {isSuccess && (
-        <Confetti
-          recycle={false}
-          numberOfPieces={300}
-          gravity={0.75}
-        />
+      {showConfetti && (
+        <Confetti recycle={false} numberOfPieces={300} gravity={0.75} />
       )}
 
       <div className="numbers">
