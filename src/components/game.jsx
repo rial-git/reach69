@@ -13,15 +13,15 @@ import {
   initialNumsMedium, 
   initialNumsHard 
 } from '../utils/constants';
-import { shuffle } from '../utils/gameHelpers'; // NEW - import helper function
+import { shuffle } from '../utils/gameHelpers';
 import NumberBlock from './NumberBlock';
 import OperationButton from './OperationButton';
 import AdvancedOperations from './AdvancedOperations';
 import ErrorMessage from './ErrorMessage';
 import { setupKeyboardShortcuts } from './keyboardhandler';
 import '../css/level1.css';
+import ConfettiEffect from './confetti.jsx';
 
-// Define a difficulties array and a mapping of levels based on difficulty.
 const difficulties = ['easy', 'med', 'hard'];
 const levelsByDifficulty = {
   easy: initialNumsEasy,
@@ -49,19 +49,20 @@ export default function Level1() {
   const blocksRef = useRef(blocks);
 
   const isSuccess = blocks.length === 1 && Number(blocks[0].value) === 69;
-  const [showConfetti, setShowConfetti] = useState(false); // NEW - state to control confetti
-  const [triggerConfetti, setTriggerConfetti] = useState(false); // New state to flag that confetti should show in the new level
+  const [showConfetti, setShowConfetti] = useState(false);
+  const confettiTimeout = useRef(null);
 
-  // handleNext advances through levels; when done with current difficulty, moves to the next.
+  // Handle advancing to next level
   const handleNext = useCallback(() => {
+    let nextLevelData;
+    
     if (currentLevelIdx < order.length - 1) {
-      // Advance to next level for current difficulty.
+      // Advance to next level for current difficulty
       const nextLevelIdx = currentLevelIdx + 1;
       setCurrentLevelIdx(nextLevelIdx);
-      const nextLevelData = levelsByDifficulty[difficulty][order[nextLevelIdx]];
-      dispatch({ type: ACTIONS.RESET, payload: nextLevelData });
+      nextLevelData = levelsByDifficulty[difficulty][order[nextLevelIdx]];
     } else {
-      // Completed all levels in current difficulty—move to the next difficulty.
+      // Completed all levels in current difficulty - move to next difficulty
       const currentDifficultyIndex = difficulties.indexOf(difficulty);
       if (currentDifficultyIndex < difficulties.length - 1) {
         const newDifficulty = difficulties[currentDifficultyIndex + 1];
@@ -69,75 +70,53 @@ export default function Level1() {
         const newOrder = shuffle([...Array(levelsByDifficulty[newDifficulty].length).keys()]);
         setOrder(newOrder);
         setCurrentLevelIdx(0);
-        dispatch({ type: ACTIONS.RESET, payload: levelsByDifficulty[newDifficulty][newOrder[0]] });
+        nextLevelData = levelsByDifficulty[newDifficulty][newOrder[0]];
       } else {
         navigate('/gameover');
         return;
       }
     }
 
-    // After advancing to the new level, show confetti for the given duration.
+    // Reset state for new level
+    dispatch({ type: ACTIONS.RESET, payload: nextLevelData });
+
+    // Show confetti for new level
+    if (confettiTimeout.current) {
+      clearTimeout(confettiTimeout.current);
+    }
+    
     setShowConfetti(true);
-    setTimeout(() => {
+    confettiTimeout.current = setTimeout(() => {
       setShowConfetti(false);
     }, CONFETTI_DURATION);
   }, [currentLevelIdx, order, difficulty, navigate, dispatch]);
 
+  // Handle success condition - advance to next level
+  useEffect(() => {
+    if (isSuccess) {
+      handleNext();
+    }
+  }, [isSuccess, handleNext]);
+
+  // Cleanup confetti timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (confettiTimeout.current) {
+        clearTimeout(confettiTimeout.current);
+      }
+    };
+  }, []);
+
+  // Update blocks ref
   useEffect(() => {
     blocksRef.current = blocks;
   }, [blocks]);
 
-  // Show confetti for 0.5 sec when success is reached, then advance level.
-  useEffect(() => {
-    if (isSuccess && currentLevelIdx !== 0) {
-      console.log('Showing confetti for duration:', CONFETTI_DURATION);
-      setShowConfetti(true);
-      const timer = setTimeout(() => {
-        setShowConfetti(false);
-        handleNext();
-      }, CONFETTI_DURATION);
-      return () => clearTimeout(timer);
-    } else if (isSuccess) {
-      handleNext();
-    }
-  }, [isSuccess, handleNext, currentLevelIdx]);
-
-  // When the triggerConfetti flag is set (i.e. new level loaded), show confetti.
-  useEffect(() => {
-    if (triggerConfetti) {
-      setShowConfetti(true);
-      const timer = setTimeout(() => {
-        setShowConfetti(false);
-        setTriggerConfetti(false);
-      }, CONFETTI_DURATION);
-      return () => clearTimeout(timer);
-    }
-  }, [triggerConfetti]);
-
-  // Also ensure confetti is disabled when new level data arrives.
-  useEffect(() => {
-    setShowConfetti(false);
-  }, [currentLevelData]);
-
-  // When currentLevelData changes and level index > 0, show confetti on level load.
-  useEffect(() => {
-    if (currentLevelIdx > 0) {
-      setShowConfetti(true);
-      const timer = setTimeout(() => {
-        setShowConfetti(false);
-      }, CONFETTI_DURATION);
-      return () => clearTimeout(timer);
-    }
-  }, [currentLevelData, currentLevelIdx]);
-
+  // Setup keyboard shortcuts
   useEffect(() => {
     const cleanup = setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, handleNext);
     return cleanup;
   }, [dispatch, isSuccess, handleNext]);
-
-  useEffect(() => {
-    dispatch({ type: ACTIONS.RESET, payload: currentLevelData });
-  }, [currentLevelData]);
 
   return (
     <div className="puzzle">
@@ -145,17 +124,7 @@ export default function Level1() {
         <ErrorMessage error={error} dispatch={dispatch} />
       )}
 
-      {showConfetti && (
-        <Confetti
-          recycle={false}
-          numberOfPieces={300}
-          // Adjust gravity so pieces fall faster or slower as needed.
-          gravity={1.25}
-          // Ensure the confetti covers the full viewport.
-          width={window.innerWidth}
-          height={window.innerHeight}
-        />
-      )}
+      {showConfetti && <ConfettiEffect />}
 
       <div className="numbers">
         {blocks.map((blk, idx) => (
