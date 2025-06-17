@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import '../css/App.css';
-import Level1 from './level1';
+import Level1 from './game';
 import HTP from './howToPlay';
 import { preloadImages } from '../utils/preLoadImages';
 

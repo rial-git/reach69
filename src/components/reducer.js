@@ -5,7 +5,9 @@ import { singleDigitOp } from './singledigitops';
 import { 
   ACTIONS,
   advancedSingleDigitOps,
-  initialNums 
+  initialNumsEasy,
+  initialNumsMedium,
+  initialNumsHard,
 } from '../utils/constants';
 
 

@@ -10,12 +10,26 @@ export const ACTIONS = {
 export const basicOps = ['+', '-', 'merge', '*', '/'];
 export const advancedTwoDigitOps = ['%', '^'];
 export const advancedSingleDigitOps = ['√', '!'];
-export const initialNums = 
+
+export const initialNumsEasy = 
 [ 
-[7,1,2,0,2],
+[6,9],
 [6,9,0],
-[6,9,0,0],
-[7,9,8,1,3],
+[6,9,0,0]
+];
+
+export const initialNumsMedium =
+[
+  [6, 9, 0],
+  [6, 9, 0, 0],
+  [6, 9, 0, 0, 0]
+];
+
+export const initialNumsHard =
+[
+  [6, 9, 0, 0],
+  [6, 9, 0, 0, 0],
+  [6, 9, 0, 0, 0, 0]
 ];
 
 
