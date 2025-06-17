@@ -10,11 +10,6 @@ export const ACTIONS = {
 export const basicOps = ['+', '-', 'merge', '*', '/'];
 export const advancedTwoDigitOps = ['%', '^'];
 export const advancedSingleDigitOps = ['√', '!'];
-
-export const testNums = [
-  [6, 9]
-]
-
 export const initialNumsEasy = 
 [
   [7, 1, 2, 0, 2],

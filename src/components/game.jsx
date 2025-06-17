@@ -21,6 +21,7 @@ import AdvancedOperations from './AdvancedOperations';
 import ErrorMessage from './ErrorMessage';
 import { setupKeyboardShortcuts } from './keyboardhandler';
 import '../css/game.css';
+import '../css-mob/gameMob.css';
 import ConfettiEffect from './confetti.jsx';
 
 const difficulties = ['easy', 'med', 'hard', 'impossible'];
@@ -29,7 +30,6 @@ const levelsByDifficulty = {
   med: initialNumsMedium,
   hard: initialNumsHard,
   impossible: initialNumsImpossible
-  
 };
 
 const CONFETTI_DURATION = 2000; // Duration in milliseconds
@@ -50,6 +50,9 @@ export default function Level1() {
   const [state, dispatch] = useReducer(reducer, currentLevelData, initState);
   const { blocks, selection: { numbers, operation }, error } = state;
   const blocksRef = useRef(blocks);
+
+  // Determine if there's at least one undoable block (has both root & meta)
+  const hasUndoable = blocks.some(block => block.root && block.meta);
 
   const isSuccess = blocks.length === 1 && Number(blocks[0].value) === 69;
   const [showConfetti, setShowConfetti] = useState(false);
@@ -130,7 +133,7 @@ export default function Level1() {
       setShowLevelComplete(true);
       const timer = setTimeout(() => {
         setShowLevelComplete(false);
-      }, 1500); // pop-up visible for 4000ms (4 seconds)
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [currentLevelIdx]);
@@ -185,9 +188,14 @@ export default function Level1() {
             onOperationSelect={(op) => dispatch({ type: ACTIONS.PICK_OPERATION, payload: op })}
           />
 
-          <button className="reset-button" onClick={() => dispatch({ type: ACTIONS.RESET, payload: currentLevelData })}>
-            Reset
-          </button>
+          {hasUndoable && (
+            <button 
+              className="reset-button" 
+              onClick={() => dispatch({ type: ACTIONS.RESET, payload: currentLevelData })}
+            >
+              Reset
+            </button>
+          )}
         </div>
 
         <button className="help-button" onClick={() => navigate('/howToPlay')}>

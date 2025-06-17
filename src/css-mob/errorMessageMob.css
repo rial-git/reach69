@@ -1,0 +1,24 @@
+
+@media screen and (max-width: 600px) {
+  .error-toast {
+    bottom: -80px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .error-toast.show {
+    bottom: 15px;
+  }
+  
+  .close-button {
+    font-size: 1.3rem;
+    margin-left: 8px;
+    padding: 0 6px;
+  }
+  
+  .error-progress {
+    height: 3px;
+  }
+}

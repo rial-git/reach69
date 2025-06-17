@@ -1,0 +1,112 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424 !important;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #CCCCCC;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #000000;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* Prevent scrolling on the entire page */
+html, body {
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* If you have a main container (like #root), ensure it doesn’t scroll */
+#root {
+  overflow: hidden;
+}
+
+/* Mobile Responsive Adjustments */
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 2.4em;  /* Decrease h1 font-size on mobile */
+  }
+  
+  button {
+    font-size: 0.9em;  /* Slightly smaller button font on mobile */
+    padding: 0.5em 1em;  /* Adjust button padding */
+  }
+  
+  body {
+    padding: 1rem;  /* Optional additional padding for body on mobile */
+  }
+}
+
+/* When mobile is flipped sideways (landscape), scale down by roughly 10% */
+@media screen and (max-width: 600px) and (orientation: landscape) {
+  html {
+    font-size: 80%; /* Reduces rem-based sizes by 10% */
+  }
+  
+  .number {
+    /* Reduce width and height by 1em relative to the mobile size */
+    width: 2em !important;
+    height: 2em !important;
+    /* Optionally adjust the font size */
+    font-size: 1.2rem !important;
+  }
+}
+
+/* ``` 
+
+### Explanation
+
+- The media query targets screens with a max-width of 600px.
+- Font sizes, padding, and other key properties are decreased to better fit on smaller devices.
+- These changes are added at the end of your file so they override desktop styles as needed.
+
+This keeps your index.css all in one file while ensuring that your website adapts neatly to mobile screens.filepath: c:\rihan\Projects\reach69\src\css\index.css */

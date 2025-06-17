@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../css/howToPlay.css';
+import '../css-mob/howToPlayMob.css'; // Adjust the path as necessary
 import { rules, mouseControls, keyboardControls } from '../utils/howToPlayInfo';
 
 export default function CheckoutPage() {

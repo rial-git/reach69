@@ -1,0 +1,43 @@
+/* Mobile Responsive Adjustments */
+@media screen and (max-width: 600px) {
+  html {
+    /* Default is often 100%; setting to 70% makes rem‐based sizes 30% smaller */
+    font-size: 70%;
+  }
+  
+  /* Arrange containers horizontally */
+  .numbers {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem !important;
+  }
+  
+  .number {
+    width: 4em !important;
+    height: 4em !important;
+    font-size: 1.4rem !important;
+  }
+  
+  .undoable {
+    width: 5.5em !important;
+    height: 5.5em !important;
+    font-size: 1.4rem !important;
+  }
+  
+  .root-info {
+    font-size: 0.8rem !important;
+    bottom: 1px !important;
+  }
+
+  /* Updated operations button to be approx. 35% larger */
+  .operation-button {
+    font-size: 1.2em !important;          /* Increased font size */
+    width: 4em !important;                /* Increased from previous values */
+    height: 4em !important;               /* Increased accordingly */
+    margin: 0.3em;                        /* Adjust margin if needed */
+    border-radius: 1em !important;        /* Adjust border-radius for new size */
+    /* Retain other properties as needed */
+  }
+}

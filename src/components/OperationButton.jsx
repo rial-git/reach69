@@ -2,6 +2,7 @@
 import React from 'react';
 import MergeIcon from '../assets/merge.svg';
 import '../css/operationButton.css';
+import '../css-mob/operationButtonMob.css'; // Adjust the path as necessary
 
 export default function OperationButton({ op, shortcut, isSelected, onClick }) {
   return (

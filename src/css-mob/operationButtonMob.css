@@ -1,0 +1,38 @@
+
+@media screen and (max-width: 600px) {
+  .operation-button {
+    font-size: 1.2em;
+    width: 3em;
+    height: 3em;
+    margin: 0.3em;
+    border-radius: 0.5em;
+  }
+  
+  .operation-button:hover {
+    transform: translateY(-1px);
+  }
+  
+  .operation-button img {
+    max-width: 16px;
+    max-height: 16px;
+  }
+  
+  .reset-button {
+    height: 2.5em;
+    width: 5em;
+    font-size: 1.2rem;
+    margin-top: 0.8em;
+  }
+  
+  .op-text {
+    font-size: 1.2rem;
+  }
+  
+  .operation-button_badge {
+    top: 0.2em;
+    left: 0.2em;
+    width: 1em;
+    height: 1em;
+    font-size: 0.8rem;
+  }
+}

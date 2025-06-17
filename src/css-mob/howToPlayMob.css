@@ -1,0 +1,98 @@
+
+@media screen and (max-width: 600px) {
+  
+  /* Checkout Page Adjustments */
+  .checkout-page {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  /* Tab Header & Title */
+  .tab-title {
+    font-size: 16px;
+    margin: 8px;
+  }
+  
+  .reach {
+    font-size: 12px;
+  }
+  
+  .logo {
+    font-size: 18px;
+    margin-left: 3px;
+  }
+  
+  /* Tab Buttons */
+  .tab-buttons button {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  /* Tab Content */
+  .tab-content {
+    padding: 5px;
+  }
+  
+  /* Shared Content Adjustments */
+  .controls-content, .rules-content {
+    padding: 15px;
+  }
+  
+  /* Block Elements */
+  .block {
+    padding: 15px;
+    margin: 8px;
+    max-width: 100%;
+  }
+  
+  .text {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .gif {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .paragraph {
+    font-size: 13px;
+  }
+  
+  .rules-text {
+    font-size: 18px;
+  }
+  
+  .rules-list {
+    padding-left: 1em;
+    font-size: 1.8em;
+  }
+  
+  .rule-item {
+    margin-bottom: 0.8em;
+  }
+  
+  .controls-heading {
+    font-size: 1.1em;
+    margin-bottom: 0.8em;
+  }
+  
+  .controls-list {
+    gap: 1em;
+  }
+  
+  .control-item {
+    width: 140px;
+    margin-bottom: 1em;
+  }
+  
+  .control-image {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 0.5em;
+  }
+  
+  .control-text {
+    font-size: 0.9em;
+  }
+}

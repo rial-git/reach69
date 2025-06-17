@@ -2,6 +2,7 @@
 import React from 'react';
 import { ACTIONS } from '../utils/constants';
 import '../css/numberBlock.css';
+import '../css-mob/numberBlockMob.css'; // Adjust the path as necessary
 
 export default function NumberBlock({ blk, idx, isSelected, dispatch }) {
   return (

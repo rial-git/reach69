@@ -1,0 +1,7 @@
+
+@media screen and (max-width: 600px) {
+  .confetti-wrapper {
+    /* For example, you might want a shorter fade duration on smaller screens */
+    animation: fadeOut 2s forwards;
+  }
+}
