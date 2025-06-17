@@ -7,6 +7,12 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
   let lastKeyCycleIndices = {}; // Track cycling index for each key
 
   function handleKeyDown(event) {
+
+  if (event.ctrlKey || event.altKey || event.shiftKey) {
+  return;
+  }
+
+
     const key = event.key;
     const blocks = blocksRef.current;
     const currentTime = Date.now();
