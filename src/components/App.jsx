@@ -1,19 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import '../css/App.css';
 import Level1 from './level1';
 import HTP from './howToPlay';
-import Logo from '../assets/r69logo.png'; // Assuming you have a logo image
-console.log(Logo);
-
+import { preloadImages } from '../utils/preLoadImages';
 
 function App() {
   const [count, setCount] = useState(0);
   const navigate = useNavigate(); // Hook for programmatic navigation
 
+  useEffect(() => {
+    preloadImages();
+  }, []);
+
   return (
     <>
-      <img src={Logo} alt="Logo" className="logo" />
+      <img src="/r69logo.svg" alt="Logo" className="logo" />
       <h1>Reach69.IO</h1>
       <h2>Reach 69 by creating equations with the given digits</h2>
 

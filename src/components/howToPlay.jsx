@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '../css/howToPlay.css';
-import reach69logo from '../assets/r69logo.png';
 import { rules, mouseControls, keyboardControls } from '../utils/howToPlayInfo';
 
 export default function CheckoutPage() {
@@ -13,7 +12,7 @@ export default function CheckoutPage() {
           <>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
               CONTROLS TO REACH
-              <img src={reach69logo} alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
+              <img src="/r69logo.svg" alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
             </span>
             <br />
           </>
@@ -21,7 +20,7 @@ export default function CheckoutPage() {
           <>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
               RULES TO REACH
-              <img src={reach69logo} alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
+              <img src="/r69logo.svg" alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
             </span>
             <br />
 
