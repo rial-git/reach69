@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import '../css/App.css';
 import '../css-mob/appMob.css';
-import Level1 from './game';
+import Game from './game';
 import HTP from './howToPlay';
 import { preloadImages } from '../utils/preLoadImages';
 
@@ -27,7 +27,7 @@ function App() {
         </div>
 
         <div>
-        <button type="button" id='playBtn' className="btn btn-dark" onClick={() => navigate('/level1')}>Play</button>
+        <button type="button" id='playBtn' className="btn btn-dark" onClick={() => navigate('/Game')}>Play</button>
         <div className="coming-soon">.</div>
         </div>
         <div>
@@ -45,7 +45,7 @@ function AppWrapper() {
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/level1" element={<Level1 />} />
+        <Route path="/Game" element={<Game />} />
         <Route path="/howToPlay" element={<HTP />} />
 
       </Routes>

@@ -3,38 +3,21 @@
 /* Root container spans full screen */
 /* Add to your CSS */
 
-.checkout-page * {
-  box-sizing: border-box;
-  margin: 0; /* Remove all margins */
-  padding: 0; /* Remove all padding */
-  border: 0; /* Remove all borders */
-  outline: none; /* Remove focus outlines */
-  font-family: inherit; /* Use inherited font family */
-  font-size: inherit; /* Use inherited font size */
-  color: inherit; /* Use inherited text color */
-  text-decoration: none; /* Remove text decorations */
-  background: none; /* Remove background */
-  
+
+/* Keep existing min-height rule */
+.checkout-page {
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-
-/* Tab section */
-.tab-section {
-  text-align: center;
-  width: 100%;
-}
-
-/* Tab header: title + buttons */
-.tab-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
+/* Add spacing for content areas */
 .tab-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 10px;
+  margin: 20px 0; /* Restore vertical spacing */
+}
+
+.tab-content {
+  margin-top: 20px;
 }
 
 .reach {
@@ -67,18 +50,6 @@
 .tab-buttons .active {
   background: white;
   color: black;
-}
-
-/* Shared content styles */
-.controls-content, .rules-content {
-  width: 100%;
-  height: 100%;
-  padding: 30px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;   /* left-align content */
-  overflow-y: auto;
 }
 
 /* Block elements inside content */
