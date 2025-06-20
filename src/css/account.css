@@ -1,0 +1,71 @@
+.account-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  top: 1.2rem;
+  right: 1.2rem;
+  z-index: 10001;
+  padding: 0;
+  transition: filter 0.2s;
+}
+.account-icon-btn:hover {
+  filter: brightness(0.7);
+}
+
+.account-page {
+  padding: 2rem;
+  max-width: 400px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  font-size: 1.1em;
+  color: #222;
+}
+
+.account-page h2 {
+  margin-bottom: 1em;
+  font-size: 1.5em;
+  color: #1976d2;
+}
+
+.account-page b {
+  color: #1976d2;
+}
+
+.account-not-logged-in {
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.2em;
+  color: #888;
+}
+
+.account-completed-section {
+  margin-top: 2em;
+  background: #f7fafd;
+  border-radius: 8px;
+  padding: 1em 1.2em;
+  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.06);
+}
+
+.account-completed-section h3 {
+  margin-top: 0;
+  color: #1976d2;
+  font-size: 1.15em;
+  margin-bottom: 0.7em;
+}
+
+.account-completed-list {
+  list-style: disc inside;
+  padding-left: 1em;
+  margin: 0;
+  color: #1976d2;
+  font-size: 1em;
+}
+
+.account-completed-empty {
+  color: #888;
+  font-size: 0.98em;
+  padding: 0.5em 0;
+}

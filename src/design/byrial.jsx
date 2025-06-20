@@ -56,7 +56,7 @@ export default function ByRialGlitch() {
 
   return (
     <a
-      href="https://github.com/rial-git/reach69"
+      href="https://github.com/rial-git"
       target="_blank"
       rel="noopener noreferrer"
       className="byrial-link"

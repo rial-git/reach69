@@ -1,6 +1,6 @@
 // components/level1Reducer.js
 import { makeBlock } from '../utils/utils';
-import { singleDigitOp } from './singledigitops';
+import { singleDigitOp } from '../ops&nums/singledigitops';
 
 import { 
   ACTIONS,
