@@ -36,7 +36,7 @@ export const initialNumsMedium =
   [4, 1, 0, 3, 0],  // 5
   [6, 4, 8, 5, 8],  // 5
   [8, 7, 6, 4, 5]   // 5
-]
+];
 
 export const initialNumsHard =
 [

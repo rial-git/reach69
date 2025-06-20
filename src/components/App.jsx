@@ -5,6 +5,7 @@ import '../css-mob/appMob.css';
 import Game from './game';
 import HTP from './howToPlay';
 import { preloadImages } from '../utils/preLoadImages';
+import ByRialGlitch from "./byrial";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -17,7 +18,7 @@ function App() {
   return (
     <>
       <img src="/r69logo.svg" alt="Logo" className="logo" />
-      <h1>Reach69.IO</h1>
+      <h1>Reach69.xyz</h1>
       <h2>Reach 69 by creating equations with the given digits</h2>
 
       <div className='btnRow'>
@@ -35,7 +36,7 @@ function App() {
         <div className="coming-soon">Coming soon!</div>
         </div>
       </div>
-
+      <ByRialGlitch />
     </>
   );
 }
