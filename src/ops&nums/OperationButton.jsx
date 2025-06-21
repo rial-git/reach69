@@ -1,6 +1,6 @@
 // components/OperationButton.jsx
 import React from 'react';
-import MergeIcon from '../assets/merge.svg';
+import MergeIcon from '../assets/Merge.svg';
 import '../css/operationButton.css';
 import '../css-mob/operationButtonMob.css'; // Adjust the path as necessary
 
