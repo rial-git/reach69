@@ -13,7 +13,7 @@ export default function CheckoutPage() {
           <>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
               CONTROLS TO REACH
-              <img src="/r69logo.svg" alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
+              <img src="/r69logo.svg" loading = "lazy" alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
             </span>
             <br />
           </>
@@ -21,7 +21,7 @@ export default function CheckoutPage() {
           <>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
               RULES TO REACH
-              <img src="/r69logo.svg" alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
+              <img src="/r69logo.svg" loading = "lazy" alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
             </span>
             <br />
 
@@ -53,7 +53,7 @@ export default function CheckoutPage() {
               <div className="controls-list">
                 {mouseControls.map((item, idx) => (
                   <div className="control-item" key={idx}>
-                    <img src={item.image} alt="Mouse control" className="control-image" />
+                    <img src={item.image} loading = "lazy" alt="Mouse control" className="control-image" />
                     <div className="control-text">{item.text}</div>
                   </div>
                 ))}
