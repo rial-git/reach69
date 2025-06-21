@@ -16,6 +16,10 @@ export default function Account() {
   if (!user) return <div className="account-not-logged-in">Not logged in.</div>;
 
   return (
+    <>
+    <div className="acc-removal">
+        <h2>For accountal removal or any other inquiries mail us: <a href="mailto:contact@rial.xyz">contact@rial.xyz</a> </h2>
+    </div>
     <div className="account-page">
       <h2>Account</h2>
       <div>
@@ -37,5 +41,6 @@ export default function Account() {
         )}
       </div>
     </div>
+    </>
   );
 }

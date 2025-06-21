@@ -69,3 +69,14 @@
   font-size: 0.98em;
   padding: 0.5em 0;
 }
+
+.acc-removal {
+  color: #000000;
+  padding: 0.5em 1em;
+  font-size: 1px; /* small but readable */
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%); /* perfectly center it */
+  text-align: center;
+}
