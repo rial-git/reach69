@@ -16,6 +16,7 @@
 .byrial-link:hover {
   color: #3b3b3b;
   outline: none;
+  will-change: transform;
 }
 
 .byrial-glitch-text {

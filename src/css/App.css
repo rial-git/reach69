@@ -64,6 +64,7 @@ h2 {
 /* Optional hover effect */
 .btnRow button:hover {
   transform: scale(1.05);
+  will-change: transform;
 }
 
 .btn-col {
