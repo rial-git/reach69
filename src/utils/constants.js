@@ -12,9 +12,10 @@ export const advancedTwoDigitOps = ['%', '^'];
 export const advancedSingleDigitOps = ['√', '!'];
 
 export const initialNumsEasy = [
-    { id: "easy-0", nums: [7, 1, 2, 0, 2] },
-  { id: "easy-1", nums: [6, 5, 7, 5, 0] },
-  { id: "easy-2", nums: [2, 6, 3, 6, 0] }
+    { id: "easy-0", nums: [6,9] },
+    { id: "easy-1", nums: [7, 1, 2, 0, 2] },
+  { id: "easy-2", nums: [6, 5, 7, 5, 0] },
+  { id: "easy-3", nums: [2, 6, 3, 6, 0] }
 ];
 
 export const initialNumsMedium = [

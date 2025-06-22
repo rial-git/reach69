@@ -2,18 +2,18 @@ import React, { useEffect, useState, useRef } from "react";
 import "../css/tips.css";
 
 const TIPS = [
-"Use the Merge operation to combine blocks.",
-  "Try using the Add operation to increase numbers.",
-    "Subtracting can help you reach the target number.",
-  "You can use any operation in any order!",
+"Use the Merge function to glue the numbers together.",
+"Only adjacent numbers can be merged.",
+"Single digit operations like root and factorial can be the key to solving some levels.",
   "Try combining numbers in different ways.",
-  "Undoable blocks can be reset with the Reset button.",
+  "Backspace undos your last operation.",
+  "Right click on a block to undo it.",
+  "Hit reset if you get stuck.",
   "Use keyboard shortcuts for faster play.",
+  "Feeling stuck? Try a different approach.",
+  "Click the '?' button below to see the How To Play page.",
   "Think ahead before merging blocks.",
   "Some levels require creative use of advanced operations.",
-  "You can always reset the level if stuck.",
-  "Hover over operation buttons to see what they do.",
-  "Try to reach 69 with as few moves as possible!",
   "Experiment with different strategies for each level."
 ];
 
