@@ -114,3 +114,15 @@
   position: relative; /* Add this to position root-info absolutely */
   /* Keep existing number styles */
 }
+
+/* Add to numberBlock.css */
+.number.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(70%);
+}
+
+.number.disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}

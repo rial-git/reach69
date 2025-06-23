@@ -1,0 +1,66 @@
+/* tutorial.css */
+/* Copy all content from game.css first */
+
+/* Additional tutorial-specific styles */
+.tutorial {
+  position: relative;
+  width: 100dvw;
+}
+
+.skip-button {
+  position: absolute;
+  bottom: 1rem;
+  left: 60rem;
+  background: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Graduate", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.skip-button:hover {
+  background: #f0f0f0;
+}
+
+.tutorial-tip {
+  font-size: 1.4rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  max-width: 600px;
+  line-height: 1.5;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.continue-button {
+  background: #4CAF50;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 2rem;
+  font-family: "Graduate", sans-serif;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.continue-button:hover {
+  background: #43a047;
+  transform: scale(1.05);
+}
+
+/* Disabled state for blocks */
+.number-block.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.operation-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

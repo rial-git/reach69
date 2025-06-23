@@ -12,10 +12,7 @@ export const advancedTwoDigitOps = ['%', '^'];
 export const advancedSingleDigitOps = ['√', '!'];
 
 export const initialNumsEasy = [
-    { id: "easy-0", nums: [6,9] },
-    { id: "easy-0", nums: [6,9,0] },
-    { id: "easy-0", nums: [6,9,0,1] },
-    { id: "easy-1", nums: [7, 1, 2, 0, 2] },
+  { id: "easy-1", nums: [7, 1, 2, 0, 2] },
   { id: "easy-2", nums: [6, 5, 7, 5, 0] },
   { id: "easy-3", nums: [2, 6, 3, 6, 0] }
 ];
@@ -74,3 +71,11 @@ export const opShortcuts = Object.fromEntries(
   Object.entries(keyMap).map(([key, op]) => [op, key])
   
 );
+
+export const tutorialNums = [6, 9];
+export const tutorialSteps = [
+  "Welcome to Reach69.xyz! The Goal is to reach 69 by calculating with given numbers. First Click on the number 6",
+  "Great! Now click on the number 9",
+  "Perfect! Now click the 'merge' operation to combine them",
+  "Congratulations! You have made your first 69. Press Continue to start playing"
+];

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { auth, provider } from '../config/firebase';
 import { signInWithPopup, signOut } from "firebase/auth";
 import '../css/App.css';
 import '../css-mob/appMob.css';
 import Game from './game';
+import TutorialMode from './tutorialMode.jsx'; // Import the new tutorial component
 import HTP from './howToPlay';
 import Account from './account.jsx';
 import { preloadImages } from '../utils/preLoadImages';
@@ -12,10 +13,16 @@ import ByRialGlitch from "../design/byrial.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [tutorialCompleted, setTutorialCompleted] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     preloadImages();
+    
+    // Check if tutorial is already completed
+    const isTutorialDone = localStorage.getItem('tutorialCompleted') === 'true';
+    setTutorialCompleted(isTutorialDone);
+    
     // Listen for auth state changes
     const unsub = auth.onAuthStateChanged(setUser);
     return () => unsub();
@@ -31,6 +38,11 @@ function App() {
 
   const handleLogout = async () => {
     await signOut(auth);
+  };
+
+  const handlePlay = () => {
+    // Navigate to tutorial if not completed, otherwise to game
+    navigate(tutorialCompleted ? '/Game' : '/Tutorial');
   };
 
   return (
@@ -52,11 +64,18 @@ function App() {
               Log In
             </button>
           )}
-          <div className="coming-soon">{user ? "" : " "}</div> {/* /*invisble charecter to keep the button row aligned*/ }
+          <div className="coming-soon">{user ? "" : " "}</div>
         </div>
         <div>
-          <button type="button" id='playBtn' className="btn btn-dark" onClick={() => navigate('/Game')}>Play</button>
-          <div className="coming-soon"> </div>  {/* /*invisble charecter to keep the button row aligned*/ }
+          <button 
+            type="button" 
+            id='playBtn' 
+            className="btn btn-dark" 
+            onClick={handlePlay}
+          >
+            Play
+          </button>
+          <div className="coming-soon"> </div>
         </div>
         <div>
           <button type="button" id='modesBtn' className="btn btn-outline-dark" >Modes</button>
@@ -73,6 +92,7 @@ function AppWrapper() {
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/Tutorial" element={<TutorialMode />} />
         <Route path="/Game" element={<Game />} />
         <Route path="/howToPlay" element={<HTP />} />
         <Route path="/account" element={<Account />} />
