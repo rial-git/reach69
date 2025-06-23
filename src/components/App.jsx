@@ -52,11 +52,11 @@ function App() {
               Log In
             </button>
           )}
-          <div className="coming-soon">{user ? "" : "."}</div>
+          <div className="coming-soon">{user ? "" : " "}</div> {/* /*invisble charecter to keep the button row aligned*/ }
         </div>
         <div>
           <button type="button" id='playBtn' className="btn btn-dark" onClick={() => navigate('/Game')}>Play</button>
-          <div className="coming-soon">.</div>
+          <div className="coming-soon"> </div>  {/* /*invisble charecter to keep the button row aligned*/ }
         </div>
         <div>
           <button type="button" id='modesBtn' className="btn btn-outline-dark" >Modes</button>
