@@ -8,9 +8,6 @@
 }
 
 .skip-button {
-  position: absolute;
-  bottom: 1rem;
-  left: 60rem;
   background: transparent;
   color: #000000;
   border: 1px solid #000000;

@@ -52,9 +52,6 @@ const [blocks] = useState(tutorialNums.map((num, idx) => ({
 
   return (
     <div className="puzzle tutorial">
-      <button className="skip-button" onClick={handleSkip}>
-        Skip Tutorial
-      </button>
 
       <div className="tutorial-tip">
         {tutorialSteps[step]}
@@ -95,6 +92,9 @@ const [blocks] = useState(tutorialNums.map((num, idx) => ({
           Continue to Game
         </button>
       )}
+      <button className="skip-button" onClick={handleSkip}>
+        Skip Tutorial
+      </button>
     </div>
   );
 }
