@@ -57,10 +57,10 @@
 
 .tips-progress-bar {
   position: absolute;
-  left: 0;
+  left: 0.5em;
   bottom: 0;
   height: 3px;
-  width: 100%;
+  width: 20em;
   background: rgba(255,255,255,0.12);
   border-radius: 0 0 1em 1em;
   overflow: hidden;

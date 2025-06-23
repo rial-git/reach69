@@ -2,9 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import "../css/tips.css";
 
 const TIPS = [
-"Use the Merge function to glue the numbers together.",
-"Only adjacent numbers can be merged.",
-"Single digit operations like root and factorial can be the key to solving some levels.",
+  "Use the Merge function to glue the numbers together.",
+  "Only adjacent numbers can be merged.",
+  "Single digit operations like root and factorial can be the key to solving some levels.",
   "Try combining numbers in different ways.",
   "Backspace undos your last operation.",
   "Right click on a block to undo it.",
@@ -27,7 +27,6 @@ function getRandomTip(prevTip) {
 
 export default function Tips() {
   const [showTips, setShowTips] = useState(() => {
-    // Persist user preference in localStorage
     const stored = localStorage.getItem("showTips");
     return stored === null ? true : stored === "true";
   });
@@ -36,14 +35,13 @@ export default function Tips() {
   const [timerPercent, setTimerPercent] = useState(100);
   const [isPaused, setIsPaused] = useState(false);
 
-  // For pausing/resuming
   const elapsedRef = useRef(0);
   const intervalRef = useRef(null);
   const hideTimeoutRef = useRef(null);
   const gapTimeoutRef = useRef(null);
   const lastTipRef = useRef(tip);
+  const hideTipAndScheduleNextRef = useRef(() => {});
 
-  // Show a new tip
   const showNextTip = () => {
     const nextTip = getRandomTip(lastTipRef.current);
     setTip(nextTip);
@@ -53,33 +51,29 @@ export default function Tips() {
     elapsedRef.current = 0;
   };
 
-  // Hide the tip and schedule the next one
   const hideTipAndScheduleNext = () => {
     setVisible(false);
     setTimerPercent(0);
     gapTimeoutRef.current = setTimeout(() => {
       showNextTip();
-    }, 2500); // gap between tips
+    }, 2500);
   };
 
-  // Main effect: show the first tip and start cycling
+  hideTipAndScheduleNextRef.current = hideTipAndScheduleNext;
+
   useEffect(() => {
     if (!showTips) return;
-
-    const initialTimeout = setTimeout(() => {
-      showNextTip();
-    }, 3000); // 3 seconds delay
-
+    
+    showNextTip();
+    
     return () => {
       clearInterval(intervalRef.current);
       clearTimeout(hideTimeoutRef.current);
       clearTimeout(gapTimeoutRef.current);
-      clearTimeout(initialTimeout);
     };
     // eslint-disable-next-line
   }, [showTips]);
 
-  // Effect to handle timer and hiding
   useEffect(() => {
     if (!visible) {
       clearInterval(intervalRef.current);
@@ -87,24 +81,29 @@ export default function Tips() {
       return;
     }
 
-    const duration = 5000;
-    // Timer for progress bar and auto-hide
-    intervalRef.current = setInterval(() => {
-      if (!isPaused) {
+    if (isPaused) {
+      clearInterval(intervalRef.current);
+      clearTimeout(hideTimeoutRef.current);
+    } else {
+      clearInterval(intervalRef.current);
+      clearTimeout(hideTimeoutRef.current);
+      
+      const duration = 5000;
+      
+      intervalRef.current = setInterval(() => {
         elapsedRef.current += 100;
         setTimerPercent(100 - (elapsedRef.current / duration) * 100);
         if (elapsedRef.current >= duration) {
           clearInterval(intervalRef.current);
-          hideTipAndScheduleNext();
+          hideTipAndScheduleNextRef.current();
         }
-      }
-    }, 100);
-
-    // Fallback: hide after duration (in case interval is missed)
-    hideTimeoutRef.current = setTimeout(() => {
-      clearInterval(intervalRef.current);
-      hideTipAndScheduleNext();
-    }, duration - elapsedRef.current);
+      }, 100);
+      
+      hideTimeoutRef.current = setTimeout(() => {
+        clearInterval(intervalRef.current);
+        hideTipAndScheduleNextRef.current();
+      }, duration - elapsedRef.current);
+    }
 
     return () => {
       clearInterval(intervalRef.current);
@@ -113,14 +112,18 @@ export default function Tips() {
     // eslint-disable-next-line
   }, [visible, isPaused]);
 
-  // Save preference
   useEffect(() => {
     localStorage.setItem("showTips", showTips);
   }, [showTips]);
 
   if (!showTips) return (
     <div className="tips-bar tips-top-left tips-hidden">
-      <button className="tips-toggle tips-show-btn" onClick={() => setShowTips(true)}>Show</button>
+      <button 
+        className="tips-toggle tips-show-btn" 
+        onClick={() => setShowTips(true)}
+      >
+        Show Tips
+      </button>
     </div>
   );
 
@@ -132,8 +135,11 @@ export default function Tips() {
     >
       <span className="tips-message">{tip}</span>
       <div className="tips-hide-btn-row">
-        <button className="tips-toggle" onClick={() => setShowTips(false)}>
-          Hide
+        <button 
+          className="tips-toggle" 
+          onClick={() => setShowTips(false)}
+        >
+          Hide Tips
         </button>
       </div>
       <div className="tips-progress-bar">
