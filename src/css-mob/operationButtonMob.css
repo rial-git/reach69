@@ -29,10 +29,6 @@
   }
   
  .operation-button_badge {
-    color: f0f0f0;
-    top: 2em;
-    left: 2em;
-    height: 0;
-    width: 0;
+    display: none;
   }
 }
