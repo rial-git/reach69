@@ -1,5 +1,3 @@
-// utils/tutorialConst.js
-// utils/isMobile.js
 export const isMobile = () =>
   /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent) ||
   (navigator.userAgent.includes("Macintosh") && 'ontouchend' in document);
