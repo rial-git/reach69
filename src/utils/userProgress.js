@@ -1,110 +1,82 @@
+// userProgress.jsx
 import { db, auth } from '../config/firebase';
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 /**
- * Mark a level as completed for the current user, in the correct difficulty array,
- * and update the currentLevel field.
- * @param {string} levelId - Unique identifier for the level (e.g., "easy-0").
+ * Mark a level as completed (only if not already done).
+ * @param {string} levelId
  */
 export async function markLevelComplete(levelId) {
   if (!auth.currentUser) return;
-  const userRef = doc(db, "users", auth.currentUser.uid);
+  const userRef = doc(db, 'users', auth.currentUser.uid);
   const userDoc = await getDoc(userRef);
+  const data = userDoc.exists() ? userDoc.data() : {};
+  const completedLevels = Array.isArray(data.completedLevels) ? data.completedLevels : [];
 
-  // Determine difficulty
-  let diffKey = null;
-  let currentLevel = null;
-  if (levelId.startsWith('easy-')) {
-    diffKey = 'completedLevelsEasy';
-    currentLevel = 'easy';
-  } else if (levelId.startsWith('med-')) {
-    diffKey = 'completedLevelsMed';
-    currentLevel = 'med';
-  } else if (levelId.startsWith('hard-')) {
-    diffKey = 'completedLevelsHard';
-    currentLevel = 'hard';
-  } else if (levelId.startsWith('impossible-')) {
-    diffKey = 'completedLevelsImpossible';
-    currentLevel = 'impossible';
-  }
-  if (!diffKey) return;
-
-  let completed = [];
-  if (userDoc.exists()) {
-    completed = userDoc.data()[diffKey] || [];
-  }
-  if (!completed.includes(levelId)) {
-    completed.push(levelId);
-    await setDoc(userRef, { [diffKey]: completed, currentLevel }, { merge: true });
-  } else {
-    // Even if already completed, update currentLevel for tracking
-    await setDoc(userRef, { currentLevel }, { merge: true });
+  if (!completedLevels.includes(levelId)) {
+    await setDoc(userRef, {
+      completedLevels: [...completedLevels, levelId],
+    }, { merge: true });
   }
 }
 
-/**
- * Get the array of completed level IDs for the current user, grouped by difficulty.
- * @returns {Promise<Object>} - { easy: [...], med: [...], hard: [...], impossible: [...] }
- */
-export async function getCompletedLevelsByDifficulty() {
-  if (!auth.currentUser) return {
-    easy: [],
-    med: [],
-    hard: [],
-    impossible: []
-  };
-  const userRef = doc(db, "users", auth.currentUser.uid);
-  const userDoc = await getDoc(userRef);
-  return userDoc.exists()
-    ? {
-        easy: userDoc.data().completedLevelsEasy || [],
-        med: userDoc.data().completedLevelsMed || [],
-        hard: userDoc.data().completedLevelsHard || [],
-        impossible: userDoc.data().completedLevelsImpossible || []
-      }
-    : {
-        easy: [],
-        med: [],
-        hard: [],
-        impossible: []
-      };
+function getDifficultyFromId(levelId) {
+  if (levelId.startsWith('easy-')) return 'easy';
+  if (levelId.startsWith('med-')) return 'med';
+  if (levelId.startsWith('hard-')) return 'hard';
+  if (levelId.startsWith('impossible-')) return 'impossible';
+  return null;
 }
 
-/**
- * Get the array of completed level IDs for the current user.
- * @returns {Promise<Array>} - Array of completed level IDs.
- */
-export async function getCompletedLevels() {
+export async function getCompletedLevelsFlat() {
   if (!auth.currentUser) return [];
-  const userRef = doc(db, "users", auth.currentUser.uid);
+  const userRef = doc(db, 'users', auth.currentUser.uid);
   const userDoc = await getDoc(userRef);
-  return userDoc.exists() ? userDoc.data().completedLevels || [] : [];
+  const data = userDoc.exists() ? userDoc.data() : {};
+  return Array.isArray(data.completedLevels) ? data.completedLevels : [];
 }
 
-/**
- * Get all available (not yet completed) levels for the current user.
- * @param {Array} levels - Array of all levels.
- * @returns {Promise<Array>} - Array of available levels.
- */
-export async function getAvailableLevels(levels) {
-  if (!auth.currentUser) return levels;
-  const userRef = doc(db, "users", auth.currentUser.uid);
-  const userDoc = await getDoc(userRef);
-  const completed = userDoc.exists() ? userDoc.data().completedLevels || [] : [];
-  // If your levels have unique IDs, use level.id; otherwise, use index
-  return levels.filter((level, idx) => !completed.includes(level.id ?? idx));
+export async function getCompletedLevelsByDifficulty() {
+  const flat = await getCompletedLevelsFlat();
+  return {
+    easy: flat.filter(id => id.startsWith('easy-')),
+    med: flat.filter(id => id.startsWith('med-')),
+    hard: flat.filter(id => id.startsWith('hard-')),
+    impossible: flat.filter(id => id.startsWith('impossible-')),
+  };
 }
 
-/**
- * Fetch the currentLevel field for the current user.
- * @returns {Promise<string|null>} - The current level ("easy", "med", "hard", "impossible") or null if not set.
- */
 export async function getCurrentLevel() {
   if (!auth.currentUser) return null;
+  const userRef = doc(db, 'users', auth.currentUser.uid);
+  const userDoc = await getDoc(userRef);
+  return userDoc.exists() ? userDoc.data().currentLevel || null : null;
+}
+
+/**
+ * Mark tutorial as completed for the current user.
+ */
+export async function markTutorialComplete(user) {
+  if (!user) return;
+  const userRef = doc(db, "users", user.uid);
+  await setDoc(userRef, { tutorialCompleted: true }, { merge: true });
+}
+
+
+/**
+ * Check if tutorial is completed for the current user.
+ * @returns {Promise<boolean>}
+ */
+export async function isTutorialCompleted() {
+  if (!auth.currentUser) return false;
   const userRef = doc(db, "users", auth.currentUser.uid);
   const userDoc = await getDoc(userRef);
-  if (userDoc.exists()) {
-    return userDoc.data().currentLevel || null;
-  }
-  return null;
+  return userDoc.exists() ? !!userDoc.data().tutorialCompleted : false;
+}
+
+export async function isTutorialDoneFromDB() {
+  if (!auth.currentUser) return false;
+  const userRef = doc(db, "users", auth.currentUser.uid);
+  const userDoc = await getDoc(userRef);
+  return userDoc.exists() ? userDoc.data()?.tutorialCompleted === true : false;
 }

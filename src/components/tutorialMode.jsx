@@ -1,5 +1,6 @@
 // components/TutorialMode.jsx
 import React, { useState, useEffect } from 'react';
+import { markTutorialComplete } from '../utils/userProgress';
 import { useNavigate } from 'react-router-dom';
 import NumberBlock from '../ops&nums/numberBlock.jsx';
 import OperationButton from '../ops&nums/OperationButton.jsx';
@@ -10,6 +11,7 @@ import '../css/game.css';
 import '../css-mob/tutorialModeMob.css';
 import { calculateAndMerge } from './reducer';
 import { isMobile } from '../utils/tutorialConst';
+import { auth } from '../config/firebase';
 
 
 export default function TutorialMode() {
@@ -205,26 +207,28 @@ export default function TutorialMode() {
     }
   };
 
-  const handleContinue = () => {
-    if (level < 3) {
-      // Move to next level
-      const nextLevel = level + 1;
-      setLevel(nextLevel);
-      setStep(0);
-      setBlocks(resetBlocks(nextLevel));
-      setSelectedNumbers([]);
-      setSelectedOp(null);
-    } else {
-      // Tutorial completed
-      localStorage.setItem('tutorialCompleted', 'true');
-      navigate('/game');
-    }
-  };
-
-  const handleSkip = () => {
+const handleContinue = async () => {
+  if (level < 3) {
+    const nextLevel = level + 1;
+    setLevel(nextLevel);
+    setStep(0);
+    setBlocks(resetBlocks(nextLevel));
+    setSelectedNumbers([]);
+    setSelectedOp(null);
+  } else {
     localStorage.setItem('tutorialCompleted', 'true');
+    await markTutorialComplete(auth.currentUser); // pass current user
     navigate('/game');
-  };
+  }
+};
+
+const handleSkip = async () => {
+  localStorage.setItem('tutorialCompleted', 'true');
+  await markTutorialComplete(auth.currentUser); // pass current user
+  navigate('/game');
+};
+
+
 
   const getCurrentStepMessage = () => {
     const stepList = [tutorialSteps, level1Steps, level2Steps, level3Steps][level] || tutorialSteps;
@@ -242,13 +246,6 @@ export default function TutorialMode() {
       default: return step === 3;
     }
   };
-
-  
-    useEffect(() => {
-    if (localStorage.getItem('tutorialCompleted') === 'true') {
-      window.location.href = 'https://reach69.xyz'; // redirect to reach69.xyz
-    }
-  }, []);
 
   return (
     <div className="puzzle tutorial">

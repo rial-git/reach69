@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "../config/firebase";
-import { getCompletedLevels } from "../utils/userProgress";
 import "../css/account.css";
 
 export default function Account() {
   const user = auth.currentUser;
   const [completed, setCompleted] = useState([]);
 
-  useEffect(() => {
-    if (user) {
-      getCompletedLevels().then(setCompleted);
-    }
-  }, [user]);
 
   if (!user) return <div className="account-not-logged-in">Not logged in.</div>;
 

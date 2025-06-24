@@ -8,26 +8,30 @@ import ByRialGlitch from '../design/byrial.jsx';
 import '../css/App.css';
 import '../css-mob/appMob.css';
 
-
+import { isTutorialDoneFromDB } from '../utils/userProgress'; 
 // Lazy load all components except CSS and utils
 const HTP = lazy(() => import('./howToPlay'));
 const Account = lazy(() => import('./account.jsx'));
 const Game = lazy(() => import('./game.jsx'));
 const TutorialMode = lazy(() => import('./tutorialMode.jsx'));
 
+
+
 function App() {
+  const [loadingAuth, setLoadingAuth] = React.useState(true);
   const [user, setUser] = React.useState(null);
   const [tutorialCompleted, setTutorialCompleted] = React.useState(false);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    
-    const isTutorialDone = localStorage.getItem('tutorialCompleted') === 'true';
-    setTutorialCompleted(isTutorialDone);
-    
-    const unsub = auth.onAuthStateChanged(setUser);
-    return () => unsub();
-  }, []);
+React.useEffect(() => {
+  const unsub = auth.onAuthStateChanged((usr) => {
+    setUser(usr);
+    setLoadingAuth(false);
+  });
+  return () => unsub();
+}, []);
+
+if (loadingAuth) return <div>Loading...</div>; // Or a spinner
 
   const handleLogin = async () => {
     try {
@@ -41,9 +45,16 @@ function App() {
     await signOut(auth);
   };
 
-  const handlePlay = () => {
-    navigate(tutorialCompleted ? '/Game' : '/Tutorial');
-  };
+
+const handlePlay = async () => {
+  if (user) {
+    const tutorialDone = await isTutorialDoneFromDB(); // ✅ fetch from Firestore
+    navigate(tutorialDone ? '/Game' : '/Tutorial');
+  } else {
+    const isTutorialDone = localStorage.getItem('tutorialCompleted') === 'true';
+    navigate(isTutorialDone ? '/Game' : '/Tutorial');
+  }
+};
 
   return (
     <>

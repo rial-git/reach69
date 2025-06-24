@@ -1,5 +1,5 @@
 // components/Level1.jsx
-import React, { useReducer, useEffect, useRef, useState, useCallback, lazy } from 'react';
+import React, { useReducer, useEffect, useRef, useState, useCallback, lazy, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reducer, initState } from './reducer';
 import {
@@ -35,7 +35,6 @@ const levelsByDifficulty = {
 const CONFETTI_DURATION = 2000;
 
 export default function Game() {
-  const [completedShown, setCompletedShown] = useState({});
   const [user, setUser] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
@@ -90,13 +89,20 @@ export default function Game() {
     });
   }, []);
 
-  // Pick the right difficulty and completed list
+  // Pick the right difficulty and completed list - memoized to avoid unnecessary recalcs
   const difficulty = user ? currentDiff : guestDiff;
-  const completedLevels = user ? completedByDiff[difficulty] : guestCompleted[difficulty];
-  const allLevels = levelsByDifficulty[difficulty];
 
-  // Find the next not-completed level
-  const notCompletedLevels = allLevels.filter(lvl => !completedLevels.includes(lvl.id));
+  const allLevels = useMemo(() => levelsByDifficulty[difficulty], [difficulty]);
+  const completedLevels = useMemo(
+    () => (user ? completedByDiff[difficulty] : guestCompleted[difficulty]),
+    [user, completedByDiff, difficulty, guestCompleted]
+  );
+
+  const notCompletedLevels = useMemo(
+    () => allLevels.filter(lvl => !completedLevels.includes(lvl.id)),
+    [allLevels, completedLevels]
+  );
+
   const currentLevelData = notCompletedLevels[0] || null;
 
   // Reducer for the puzzle
@@ -120,7 +126,7 @@ export default function Game() {
   const [showConfetti, setShowConfetti] = useState(false);
   const confettiTimeout = useRef(null);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
-  const popupTimeout = useRef(null); // Add this ref for popup timeout
+  const popupTimeout = useRef(null);
 
   const getNextDifficulty = (current) => {
     const idx = difficulties.indexOf(current);
@@ -162,16 +168,16 @@ export default function Game() {
     // Clear existing timeouts
     if (confettiTimeout.current) clearTimeout(confettiTimeout.current);
     if (popupTimeout.current) clearTimeout(popupTimeout.current);
-    
+
     // Show level complete popup and confetti
     setShowLevelComplete(true);
     setShowConfetti(true);
-    
+
     // Set timeouts to hide them
     popupTimeout.current = setTimeout(() => {
       setShowLevelComplete(false);
     }, 1500);
-    
+
     confettiTimeout.current = setTimeout(() => {
       setShowConfetti(false);
     }, CONFETTI_DURATION);
@@ -211,7 +217,7 @@ export default function Game() {
     return cleanup;
   }, [dispatch, isSuccess, handleNext]);
 
-  // After updating guestCompleted, check if all are done and advance
+  // After updating guestCompleted, check if all are done and advance difficulty
   useEffect(() => {
     const total = levelsByDifficulty[guestDiff].length;
     const done = guestCompleted[guestDiff].length;
