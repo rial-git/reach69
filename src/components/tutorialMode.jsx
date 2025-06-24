@@ -300,9 +300,11 @@ export default function TutorialMode() {
           {level < 3 ? "Next Level" : "Continue to Game"}
         </button>
       )}
-      <button className="skip-button" onClick={handleSkip}>
-        Skip Tutorial
-      </button>
+{blocks.length > 1 && (
+  <button className="skip-button" onClick={handleSkip}>
+    Skip Tutorial
+  </button>
+)}
     </div>
   );
 }
