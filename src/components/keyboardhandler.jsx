@@ -2,11 +2,11 @@
 import { ACTIONS, keyMap } from '../utils/constants';
 
 export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, handleNext) {
-  const threshold = 1000; // ms timeframe for multi-key buffering
+  const threshold = 1000; // ms timeframe for buffering multi-key sequences
   let pendingSequence = "";    // accumulate digit sequence
   let pendingTimer = null;
   let lastKeyPressed = null;
-  let lastKeyCycleIndices = {}; // Track cycle index per digit
+  let lastKeyCycleIndices = {}; // Track cycle index per key or sequence
   let lastKeyPressTime = 0;
 
   function clearPending() {
@@ -18,37 +18,29 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
   }
 
   /**
-   * Handles single-digit selection/cycling:
-   * 1. Exact-equal: blocks whose value exactly equals `key`. If multiple, cycles unconditionally.
-   * 2. If none exact-equal, and no merged-prefix (waiting for multi-digit), then:
-   *    a. StartsWith: blocks whose value startsWith key, cycle within threshold.
-   *    b. If none, show error or silent skip.
-   *
-   * Returns true if a selection or error was handled here, false if caller should buffer (merged-prefix).
+   * Handles selecting/cycling for a single-digit key.
+   * Returns true if handled (selected/cycled or error/silent skip), false if should buffer (merged-prefix exists).
    */
   function processSingleDigit(key) {
     const blocks = blocksRef.current;
     const now = Date.now();
 
-    // 1. Exact-equal matches
+    // 1. Exact-equal matches: blocks whose value exactly equals this single digit
     const exactIndices = blocks
       .map((blk, idx) => (String(blk.value) === key ? idx : -1))
       .filter(idx => idx !== -1);
 
     if (exactIndices.length > 0) {
-      // If multiple exact-equal blocks, cycle among them unconditionally
+      // Cycle among exact-equal blocks unconditionally (ignore threshold for cycling duplicates)
       if (exactIndices.length > 1) {
         if (lastKeyPressed === key) {
-          // advance cycle index even if beyond threshold
           lastKeyCycleIndices[key] = ((lastKeyCycleIndices[key] || 0) + 1) % exactIndices.length;
         } else {
           lastKeyCycleIndices[key] = 0;
         }
       } else {
-        // Only one exact-equal block
         lastKeyCycleIndices[key] = 0;
       }
-      // Update lastKeyPressed/time so next press cycles
       lastKeyPressed = key;
       lastKeyPressTime = now;
 
@@ -62,7 +54,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
       return true;
     }
 
-    // 2. No exact-equal: check merged-prefix: if any merged-block startsWith this digit, buffer instead of selecting now
+    // 2. No exact-equal single-digit: check merged-prefix -> if exists, buffer
     const hasMergedPrefix = blocks.some(
       blk =>
         blk.root &&
@@ -70,17 +62,17 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
         String(blk.value).length > 1
     );
     if (hasMergedPrefix) {
-      // Indicate caller to buffer
+      // Indicate to caller: should buffer waiting for multi-digit
       return false;
     }
 
-    // 3. StartsWith fallback: blocks whose value startsWith this digit
+    // 3. StartsWith fallback: select/cycle blocks where value startsWith this digit
     const matchingIndices = blocks
       .map((blk, idx) => (String(blk.value).startsWith(key) ? idx : -1))
       .filter(idx => idx !== -1);
 
     if (matchingIndices.length > 0) {
-      // Cycle among them within threshold
+      // Cycle within threshold
       if (lastKeyPressed === key && now - lastKeyPressTime <= threshold) {
         lastKeyCycleIndices[key] = ((lastKeyCycleIndices[key] || 0) + 1) % matchingIndices.length;
       } else {
@@ -118,14 +110,14 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
     const blocks = blocksRef.current;
     const now = Date.now();
 
-    // If a non-digit arrives while a digit sequence is pending: clear pendingSequence and process its first digit
+    // If a non-digit arrives while pendingSequence exists: clear buffer and process its first digit
     if (!/^[0-9]$/.test(key) && pendingSequence) {
       const firstDigit = pendingSequence.charAt(0);
       clearPending();
       processSingleDigit(firstDigit);
     }
 
-    // Prevent default for handled keys
+    // Prevent default for keys we handle
     if (
       (keyMap[key] ||
         key === 'Escape' ||
@@ -155,7 +147,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
       lastKeyPressTime = 0;
       return;
     }
-    // Backspace: undo
+    // Backspace: undo last merged
     if (key === 'Backspace') {
       const maxMergedTime = Math.max(...blocks.map(blk => blk.meta?.mergedTime || 0));
       const lastMergedIdx = [...blocks].findIndex(b => b.meta?.mergedTime === maxMergedTime);
@@ -180,25 +172,45 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
 
     // Digit logic
     if (/^[0-9]$/.test(key)) {
-      // 1. If we have a pendingSequence and still within threshold, attempt to build multi-digit
+      // 1. If pendingSequence exists and still within threshold, try multi-digit extension
       if (pendingSequence && now - lastKeyPressTime <= threshold) {
         const newSequence = pendingSequence + key;
-        // 1a. Check exact match for multi-digit
-        const exactMultiIdx = blocks.findIndex(
-          blk => String(blk.value) === newSequence
-        );
-        if (exactMultiIdx !== -1) {
-          // Found exact multi-digit block: select it
+
+        // 1a. Exact-match for multi-digit duplicates:
+        // Find all blocks whose value exactly equals newSequence
+        const exactMultiIndices = blocks
+          .map((blk, idx) => (String(blk.value) === newSequence ? idx : -1))
+          .filter(idx => idx !== -1);
+
+        if (exactMultiIndices.length > 0) {
+          // Cycle among duplicate multi-digit blocks unconditionally
+          // Use the sequence string as key for cycling index
+          const seqKey = newSequence;
+          if (exactMultiIndices.length > 1) {
+            if (lastKeyPressed === seqKey) {
+              lastKeyCycleIndices[seqKey] = ((lastKeyCycleIndices[seqKey] || 0) + 1) % exactMultiIndices.length;
+            } else {
+              lastKeyCycleIndices[seqKey] = 0;
+            }
+          } else {
+            lastKeyCycleIndices[seqKey] = 0;
+          }
+          // Update lastKeyPressed/time to sequence
+          lastKeyPressed = newSequence;
+          lastKeyPressTime = now;
+
           clearPending();
           dispatch({ type: ACTIONS.CLEAR_SELECTION, payload: { type: 'numbers' } });
           setTimeout(() => {
-            dispatch({ type: ACTIONS.PICK_NUMBER, payload: exactMultiIdx });
+            dispatch({
+              type: ACTIONS.PICK_NUMBER,
+              payload: exactMultiIndices[lastKeyCycleIndices[seqKey]],
+            });
           }, 0);
-          lastKeyPressed = null;
-          lastKeyPressTime = 0;
           return;
         }
-        // 1b. Check prefix for longer blocks: any merged-block startsWith newSequence?
+
+        // 1b. Check prefix for longer merged-blocks: any blk.root with value.startsWith(newSequence) and longer?
         const hasLongerPrefix = blocks.some(
           blk =>
             blk.root &&
@@ -206,7 +218,7 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
             String(blk.value).length > newSequence.length
         );
         if (hasLongerPrefix) {
-          // Buffer more digits
+          // Buffer newSequence
           pendingSequence = newSequence;
           lastKeyPressTime = now;
           if (pendingTimer) clearTimeout(pendingTimer);
@@ -219,20 +231,18 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
           }, threshold);
           return;
         }
-        // 1c. No multi-digit match or prefix: fallback: first process the pendingSequence's first digit, then current key fresh
+
+        // 1c. No multi-digit exact match or prefix: fallback
+        // First process the first digit of pendingSequence:
         const prevSeq = pendingSequence;
         clearPending();
         processSingleDigit(prevSeq.charAt(0));
-        // Now process current key as fresh:
-        // First, attempt single-digit exact/cycling or buffer if needed
-        // Check exact-equal or merged-prefix etc.
-        // Attempt processSingleDigit(key):
+        // Then process current key fresh:
         const handled = processSingleDigit(key);
         if (handled) {
           return;
         }
-        // If not handled (i.e., buffer needed because merged-prefix exists)
-        // Buffer current key:
+        // If not handled (i.e. buffer needed), start new buffer:
         pendingSequence = key;
         lastKeyPressTime = now;
         if (pendingTimer) clearTimeout(pendingTimer);
@@ -245,20 +255,18 @@ export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, 
         return;
       }
 
-      // 2. No pendingSequence or expired: this is first digit press
-      // First try single-digit exact/cycling or detect buffer
+      // 2. No pendingSequence or expired: first digit press
+      // Try single-digit handling (exact-equal or startsWith or buffer)
       const handledSingle = processSingleDigit(key);
       if (handledSingle) {
-        // either selected/cycled or error/silent skip
         clearPending();
         return;
       }
-      // processSingleDigit returned false => merged-prefix exists, so buffer
+      // If not handledSingle (i.e., merged-prefix exists), buffer:
       pendingSequence = key;
       lastKeyPressTime = now;
       if (pendingTimer) clearTimeout(pendingTimer);
       pendingTimer = setTimeout(() => {
-        // Timeout: no further digit. Process single-digit now.
         const firstDigit = pendingSequence.charAt(0);
         pendingSequence = "";
         pendingTimer = null;
