@@ -18,7 +18,7 @@ export default function Account() {
   return (
     <>
     <div className="acc-removal">
-        <h2>For accountal removal or any other inquiries mail us: <a href="mailto:contact@rial.xyz">contact@rial.xyz</a> </h2>
+        <h2>For accountal removal or any other inquiries mail us: <a href="mailto:rial.contactus@gmail.com">rial.contactus@gmail.com</a> </h2>
     </div>
     <div className="account-page">
       <h2>Account</h2>
@@ -31,7 +31,7 @@ export default function Account() {
       <div className="account-completed-section">
         <h3>Completed Levels</h3>
         {completed.length === 0 ? (
-          <div className="account-completed-empty">No levels completed yet.</div>
+          <div className="account-completed-empty">Comming Soon!</div>
         ) : (
           <ul className="account-completed-list">
             {completed.map((levelId, i) => (
