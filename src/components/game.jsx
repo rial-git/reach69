@@ -1,5 +1,5 @@
 // components/Level1.jsx
-import React, { useReducer, useEffect, useRef, useState, useCallback } from 'react';
+import React, { useReducer, useEffect, useRef, useState, useCallback, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { reducer, initState } from './reducer';
 import {
@@ -13,7 +13,7 @@ import {
   initialNumsHard,
   initialNumsImpossible
 } from '../utils/constants';
-import Tips from '../design/tips.jsx';
+const Tips = lazy(() => import('../design/tips.jsx'));
 import NumberBlock from '../ops&nums/numberBlock.jsx';
 import OperationButton from '../ops&nums/OperationButton.jsx';
 import AdvancedOperations from '../ops&nums/AdvancedOperations.jsx';
