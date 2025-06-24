@@ -8,7 +8,7 @@ import '../css-mob/appMob.css';
 
  // Import the new tutorial component
 import HTP from './howToPlay';
-import Account from './Account.jsx';
+import Account from './account.jsx';
 import { preloadImages } from '../utils/preLoadImages';
 import ByRialGlitch from "../design/byrial.jsx";
 
