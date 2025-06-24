@@ -8,7 +8,7 @@ import '../css-mob/appMob.css';
 
  // Import the new tutorial component
 import HTP from './howToPlay';
-import Account from './account.jsx';
+import Account from './Account.jsx';
 import { preloadImages } from '../utils/preLoadImages';
 import ByRialGlitch from "../design/byrial.jsx";
 
@@ -104,7 +104,7 @@ function AppWrapper() {
           <Route path="/Tutorial" element={<TutorialMode />} />
           <Route path="/Game" element={<Game />} />
           <Route path="/howToPlay" element={<HTP />} />
-          <Route path="/account" element={<Account />} />
+          <Route path="/Account" element={<Account />} />
         </Routes>
       </Suspense>
     </Router>
