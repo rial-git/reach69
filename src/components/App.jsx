@@ -55,16 +55,18 @@ function App() {
         <div>
           {user ? (
             <>
-              <button type="button" className="btn btn-outline-dark" onClick={handleLogout}>
-                Log Out ({user.displayName || user.email})
+              <button type="button" id='logOutBtn' className="btn btn-outline-dark" onClick={handleLogout}>
+                Log Out 
               </button>
+              
             </>
+          
           ) : (
             <button type="button" id='logInBtn' className="btn btn-outline-dark" onClick={handleLogin}>
               Log In
             </button>
           )}
-          <div className="coming-soon">{user ? "" : " "}</div>
+          <div className="coming-soon">{user ? "" : "dsjfdskj"}</div>
         </div>
         <div>
           <button 

@@ -83,3 +83,27 @@ h2 {
   user-select: none;
   pointer-events: none;
 }
+
+#logOutBtn.btn-outline-dark {
+  color: black;
+  border: solid transparent; /* Transparent border to allow gradient */
+  cursor: pointer;
+  transition:  0.3s ease;
+  user-select: none;
+  background-color: #d0d0d0; /* Base background color */
+  /* Gradient border using background layers */
+  background-image: 
+    linear-gradient(#d0d0d0, #d0d0d0), /* Solid color fill */
+    linear-gradient(45deg, #3b3b3b, #c51c1c); /* Gradient border */
+  background-clip: padding-box, border-box; /* Clip layers to respective areas */
+  background-origin: border-box; /* Align background with border box */
+}
+
+#logOutBtn.btn-outline-dark:hover {
+  background-image: 
+    linear-gradient(#000000, #000000), /* Darker fill on hover */
+    linear-gradient(45deg, #3b3b3b, #c51c1c);
+    border: none; /* Remove border on hover */
+    color: #ffffff;
+    transition: 0.3s ease;
+}
