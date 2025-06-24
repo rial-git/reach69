@@ -228,7 +228,7 @@ export default function TutorialMode() {
   const getCurrentStepMessage = () => {
     const stepList = [tutorialSteps, level1Steps, level2Steps, level3Steps][level] || tutorialSteps;
     let msg = stepList[step];
-    return isMobile() ? msg.replace(/right click/gi, 'Hold Press') : msg;
+    return isMobile() ? msg.replace(/right click/gi, 'Hold the number') : msg;
   };
 
   // Check if continue button should be shown
