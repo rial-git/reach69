@@ -18,6 +18,21 @@
   flex-wrap: wrap;
 }
 
+.tips-progress-bar {
+  position: absolute;
+  left: 0;          /* changed from 0.5em */
+  bottom: 0;
+  height: 3px;
+  width: 100%;      /* changed from 20em */
+  background: rgba(255,255,255,0.12);
+  border-radius: 0 0 1em 1em;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-left: 0.5em; /* to keep the left spacing */
+  padding-right: 0.5em; /* optional for symmetry */
+}
+
+
 .tips-top-left {
   top: 1.2rem;
   left: 1.2rem;
@@ -53,17 +68,6 @@
 .tips-toggle:hover {
   background: #23232b;
   color: #fff;
-}
-
-.tips-progress-bar {
-  position: absolute;
-  left: 0.5em;
-  bottom: 0;
-  height: 3px;
-  width: 20em;
-  background: rgba(255,255,255,0.12);
-  border-radius: 0 0 1em 1em;
-  overflow: hidden;
 }
 
 .tips-progress {
