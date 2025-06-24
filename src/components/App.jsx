@@ -66,7 +66,7 @@ function App() {
               Log In
             </button>
           )}
-          <div className="coming-soon">{user ? "" : "dsjfdskj"}</div>
+          <div className="coming-soon">{user ? "" : " "}</div>
         </div>
         <div>
           <button 
