@@ -62,7 +62,7 @@ function App() {
               Log In
             </button>
           )}
-          <div className="coming-soon">{user ? "" : " "}</div>
+          <div className="coming-soon">{user ? " " : " "}</div>
         </div>
         <div>
           <button 
