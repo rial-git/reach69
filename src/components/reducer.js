@@ -24,7 +24,7 @@ export function initState(nums) {
 }
 
 
-function calculateAndMerge(state, i1, i2, op) {
+ export function calculateAndMerge(state, i1, i2, op) {
 
   const { blocks } = state;
   const b1 = blocks[i1], b2 = blocks[i2];
