@@ -12,7 +12,7 @@ export default function AccountIcon({ user }) {
       onClick={() => navigate("/account")}
       title="Account"
     >
-      <accountLogo size={36} color="#222" />
+      <img src={accountLogo} alt="Account" width={36} height={36} />
     </button>
   );
 }

@@ -1,5 +1,5 @@
 // components/TutorialMode.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NumberBlock from '../ops&nums/numberBlock.jsx';
 import OperationButton from '../ops&nums/OperationButton.jsx';
@@ -243,6 +243,13 @@ export default function TutorialMode() {
       default: return step === 3;
     }
   };
+
+  
+    useEffect(() => {
+    if (localStorage.getItem('tutorialCompleted') === 'true') {
+      window.location.href = 'https://reach69.xyz'; // redirect to reach69.xyz
+    }
+  }, []);
 
   return (
     <div className="puzzle tutorial">
