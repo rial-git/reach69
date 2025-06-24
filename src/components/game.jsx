@@ -18,7 +18,7 @@ import NumberBlock from '../ops&nums/numberBlock.jsx';
 import OperationButton from '../ops&nums/OperationButton.jsx';
 import AdvancedOperations from '../ops&nums/AdvancedOperations.jsx';
 import ErrorMessage from '../design/ErrorMessage.jsx';
-import { setupKeyboardShortcuts } from './keyboardhandler';
+import { setupKeyboardShortcuts } from './keyboardhandler.jsx';
 import '../css/game.css';
 import '../css-mob/gameMob.css';
 import ConfettiEffect from '../design/confetti.jsx';
