@@ -58,7 +58,7 @@ const handlePlay = async () => {
 
   return (
     <>
-      <img src="/r69logo.svg" alt="Logo" className="logo" />
+      <img rel = "preload" src="/r69logo.svg" alt="Logo" className="logo"  />
       <h1>Reach69.xyz</h1>
       <h2>Reach 69 by creating equations with the given digits</h2>
 

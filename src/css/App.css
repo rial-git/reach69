@@ -6,6 +6,17 @@
   box-sizing: border-box;
 }
 
+body::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  background-image: url('/r69logo.svg');
+  background-size: contain;
+  pointer-events: none;
+  z-index: -999;
+}
+
 
 .logo {
   aspect-ratio: 1 / 1;
