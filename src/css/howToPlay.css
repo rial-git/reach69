@@ -4,37 +4,62 @@
 /* Add to your CSS */
 
 
+/* Also ensure the html and body allow scrolling */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
 /* Keep existing min-height rule */
 .checkout-page {
   min-height: 100vh;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  padding-top: 3rem; /* <-- this line fixes the cutoff issue */
 }
+
+
 
 /* Add spacing for content areas */
 .tab-title {
-  margin: 20px 0; /* Restore vertical spacing */
+  margin: 20px 0;
+  text-align: center;
+  padding-top: 3rem; /* ensures title doesn't get clipped at the top */
 }
 
+/* Ensure consistent content height and smooth switching */
 .tab-content {
   margin-top: 20px;
+  min-height: 60vh;  /* Keeps height from collapsing */
+  transition: opacity 0.3s ease-in-out;
 }
+
+/* Optional fade-in effect */
+.tab-content.fade {
+  opacity: 0;
+  pointer-events: none;
+}
+
 
 .reach {
   font-size: 14px;
   color: white;
 }
 
-.logo {
-  font-size: 22px;
-  margin-left: 5px;
-}
 
 /* Tab switch buttons */
 .tab-buttons {
   display: flex;
   width: 100%;
+  max-width: 1000px;   /* match .tab-content and .rules-list */
+  margin: 0 auto;      /* center align */
+  border-bottom: 2px solid #ddd;
 }
+
 
 .tab-buttons button {
   flex: 1;
@@ -147,11 +172,19 @@
   overflow-x: hidden;
 }
 
-/* Also ensure the html and body allow scrolling */
-html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: auto;
+.tab-logo {
+  height: 0.7em;   /* Super small height */
+  width: auto;     /* Preserve aspect ratio */
+  margin-left: 0.3em; /* slight gap from text */
+  vertical-align: middle;
 }
+
+.tab-title-text {
+  font-size: 2em;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em; /* smaller gap than before since logo is tiny */
+  color: #333;
+}
+

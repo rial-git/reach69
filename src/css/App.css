@@ -1,15 +1,11 @@
 #root {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: "Graduate", sans-serif;
+  width: 100%;
+  min-height: 100vh;
+  margin-top: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 
 .logo {
   aspect-ratio: 1 / 1;

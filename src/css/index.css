@@ -4,6 +4,7 @@
   font-display: swap;
 }
 
+/* Make sure everything takes full size and scroll behaves normally */
 html, body {
   height: 100%;
   margin: 0;
@@ -12,26 +13,27 @@ html, body {
 
 body {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: center;     /* center horizontally */
+  align-items: center;         /* center vertically */
   background-color: #CCCCCC;
   font-family: "Graduate", sans-serif;
 }
 
 #root {
-  flex: 1;
   width: 100%;
   max-width: 1280px;
   padding: 2rem;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center;     /* center contents vertically inside #root */
   text-align: center;
+  min-height: 100vh;
 }
 
 
+/* Headings and buttons remain same */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -48,9 +50,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #000000;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -68,4 +72,3 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
-

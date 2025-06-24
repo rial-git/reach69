@@ -1,51 +1,46 @@
 import React, { useState } from 'react';
 import '../css/howToPlay.css';
-import '../css-mob/howToPlayMob.css'; // Adjust the path as necessary
+import '../css-mob/howToPlayMob.css';
 import { rules, mouseControls, keyboardControls } from '../utils/howToPlayInfo';
 
-export default function CheckoutPage() {
+export default function HowToPlayPage() {
   const [activeTab, setActiveTab] = useState('controls');
+  const [fade, setFade] = useState(false);
+
+  const handleTabSwitch = (tab) => {
+    setFade(true); // Start fade-out
+    setTimeout(() => {
+      setActiveTab(tab);
+      setFade(false); // Fade-in new tab
+    }, 150); // Duration must match CSS transition
+  };
 
   return (
-    <div className="checkout-page">  
+    <div className="checkout-page">
       <div className="tab-title">
-        {activeTab === 'controls' ? (
-          <>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
-              CONTROLS TO REACH
-              <img src="/r69logo.svg" loading = "lazy" alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
-            </span>
-            <br />
-          </>
-        ) : (
-          <>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5em' }}>
-              RULES TO REACH
-              <img src="/r69logo.svg" loading = "lazy" alt="Reach69 Logo" style={{ height: '1.5em', verticalAlign: 'middle' }} />
-            </span>
-            <br />
-
-          </>
-          
-        )}
+        <span className="tab-title-text">
+          {activeTab === 'controls' ? 'CONTROLS TO REACH' : 'RULES TO REACH'}
+          <img src="/r69logo.svg" alt="Reach69 Logo" className="tab-logo" loading="lazy" />
+        </span>
+        <br />
       </div>
+
       <div className="tab-buttons">
         <button
           className={activeTab === 'controls' ? 'active' : ''}
-          onClick={() => setActiveTab('controls')}
+          onClick={() => handleTabSwitch('controls')}
         >
           CONTROLS
         </button>
         <button
           className={activeTab === 'rules' ? 'active' : ''}
-          onClick={() => setActiveTab('rules')}
+          onClick={() => handleTabSwitch('rules')}
         >
           RULES
         </button>
       </div>
 
-
-      <div className="tab-content">
+      <div className={`tab-content ${fade ? 'fade' : ''}`}>
         {activeTab === 'controls' ? (
           <div className="controls-content">
             <div className="controls-section">
@@ -53,7 +48,7 @@ export default function CheckoutPage() {
               <div className="controls-list">
                 {mouseControls.map((item, idx) => (
                   <div className="control-item" key={idx}>
-                    <img src={item.image} loading = "lazy" alt="Mouse control" className="control-image" />
+                    <img src={item.image} alt="Mouse control" className="control-image" loading="lazy" />
                     <div className="control-text">{item.text}</div>
                   </div>
                 ))}
@@ -64,7 +59,7 @@ export default function CheckoutPage() {
               <div className="controls-list">
                 {keyboardControls.map((item, idx) => (
                   <div className="control-item" key={idx}>
-                    <div className="control-image">{item.icon}</div>
+                    <div className="control-icon-text">{item.icon}</div>
                     <div className="control-text">{item.text}</div>
                   </div>
                 ))}
