@@ -7,6 +7,7 @@ import { opShortcuts } from '../utils/constants';
 import { tutorialSteps, tutorialNums, level1Nums, level1Steps, level2Nums, level2Steps, level3Nums, level3Steps } from '../utils/tutorialConst.js';
 import '../css/tutorialMode.css';
 import '../css/game.css';
+import '../css-mob/tutorialModeMob.css';
 import { calculateAndMerge } from './reducer';
 import { isMobile } from '../utils/tutorialConst';
 
