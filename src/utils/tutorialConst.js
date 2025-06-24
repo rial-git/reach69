@@ -1,4 +1,7 @@
 // utils/tutorialConst.js
+// utils/isMobile.js
+export const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
+
 export const tutorialNums = [6, 9];
 export const tutorialSteps = [
   "Welcome to Reach69.xyz! The Goal is to reach 69 by calculating with given numbers. First Click on the number 6",

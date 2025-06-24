@@ -8,8 +8,11 @@ import { tutorialSteps, tutorialNums, level1Nums, level1Steps, level2Nums, level
 import '../css/tutorialMode.css';
 import '../css/game.css';
 import { calculateAndMerge } from './reducer';
+import { isMobile } from '../utils/tutorialConst';
+
 
 export default function TutorialMode() {
+
   const [level, setLevel] = useState(0);
   const [step, setStep] = useState(0);
   const [blocks, setBlocks] = useState(() => {
@@ -222,15 +225,10 @@ export default function TutorialMode() {
     navigate('/game');
   };
 
-  // Get current step message based on level
   const getCurrentStepMessage = () => {
-    switch(level) {
-      case 0: return tutorialSteps[step];
-      case 1: return level1Steps[step];
-      case 2: return level2Steps[step];
-      case 3: return level3Steps[step];
-      default: return tutorialSteps[step];
-    }
+    const stepList = [tutorialSteps, level1Steps, level2Steps, level3Steps][level] || tutorialSteps;
+    let msg = stepList[step];
+    return isMobile() ? msg.replace(/right click/gi, 'Hold Press') : msg;
   };
 
   // Check if continue button should be shown
