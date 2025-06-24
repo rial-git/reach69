@@ -10,10 +10,10 @@ export const tutorialSteps = [
 export const level1Nums = [6, 9, 0];
 export const level1Steps = [
   "Level 2: Now let's try with three numbers. Click on the number 6",
-  "Great! Now click on the number 9",
+  "can you solve this by yourseld? 🌚 also you can right click to undo btw",
   "Perfect! Click the 'merge' operation to combine 6 and 9 into 69",
   "Now click on the 69 you just created",
-  "Then click on the number 0",
+  "Then click on the number 0, remember you can undo by right clicking",
   "Now choose either the '+' or '-' operation to add or subtract 0",
   "Well done! 69 + 0 or 69 - 0 both give 69. Press Continue to next level"
 ];
@@ -26,7 +26,7 @@ export const level2Steps = [
   "Now click on the 72 you just created",
   "Then click on the number 3",
   "Now click the '-' operation to subtract 3 from 72",
-  "Excellent! 72 - 3 = 69. Press Continue to next level"
+  "Excellent! 72 - 3 = 69. Press Continue to next level, yayy dont forget you can right click to undo",
 ];
 
 export const level3Nums = [7, 1, 2, 0, 2];
@@ -42,7 +42,7 @@ export const level3Steps = [
   "Then click on the number 2",
   "Now click the '*' operation to multiply 0 and 2",
   "Good! 0 * 2 = 0. Now we need to combine this with our 69",
-  "Click on the 69",
+  "Click on the 69, you can right click in game btw, not here tho",
   "Then click on the 0",
   "Now choose either '+' or '-' to add/subtract 0 to 69",
   "Congratulations! You've completed all tutorial levels. Press Continue to start playing"
