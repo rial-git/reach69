@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { auth, provider } from '../config/firebase';
 import { signInWithPopup, signOut } from "firebase/auth";
 import '../css/App.css';
 import '../css-mob/appMob.css';
-import Game from './game';
-import TutorialMode from './tutorialMode.jsx'; // Import the new tutorial component
+
+ // Import the new tutorial component
 import HTP from './howToPlay';
 import Account from './account.jsx';
 import { preloadImages } from '../utils/preLoadImages';
 import ByRialGlitch from "../design/byrial.jsx";
+
+
+//lazyyyyyyyyyy
+const Game = lazy(() => import('./game.jsx'));
+const TutorialMode = lazy(() => import('./tutorialMode.jsx'));
 
 function App() {
   const [user, setUser] = useState(null);
@@ -92,13 +98,15 @@ function App() {
 function AppWrapper() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/Tutorial" element={<TutorialMode />} />
-        <Route path="/Game" element={<Game />} />
-        <Route path="/howToPlay" element={<HTP />} />
-        <Route path="/account" element={<Account />} />
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/Tutorial" element={<TutorialMode />} />
+          <Route path="/Game" element={<Game />} />
+          <Route path="/howToPlay" element={<HTP />} />
+          <Route path="/account" element={<Account />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }

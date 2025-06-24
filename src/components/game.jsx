@@ -35,6 +35,7 @@ const levelsByDifficulty = {
 const CONFETTI_DURATION = 2000;
 
 export default function Game() {
+  const [completedShown, setCompletedShown] = useState({});
   const [user, setUser] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
@@ -119,6 +120,7 @@ export default function Game() {
   const [showConfetti, setShowConfetti] = useState(false);
   const confettiTimeout = useRef(null);
   const [showLevelComplete, setShowLevelComplete] = useState(false);
+  const popupTimeout = useRef(null); // Add this ref for popup timeout
 
   const getNextDifficulty = (current) => {
     const idx = difficulties.indexOf(current);
@@ -157,10 +159,19 @@ export default function Game() {
       }
     }
 
-    if (confettiTimeout.current) {
-      clearTimeout(confettiTimeout.current);
-    }
+    // Clear existing timeouts
+    if (confettiTimeout.current) clearTimeout(confettiTimeout.current);
+    if (popupTimeout.current) clearTimeout(popupTimeout.current);
+    
+    // Show level complete popup and confetti
+    setShowLevelComplete(true);
     setShowConfetti(true);
+    
+    // Set timeouts to hide them
+    popupTimeout.current = setTimeout(() => {
+      setShowLevelComplete(false);
+    }, 1500);
+    
     confettiTimeout.current = setTimeout(() => {
       setShowConfetti(false);
     }, CONFETTI_DURATION);
@@ -181,12 +192,11 @@ export default function Game() {
     }
   }, [isSuccess, handleNext]);
 
-  // Cleanup confetti timeout on unmount
+  // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
-      if (confettiTimeout.current) {
-        clearTimeout(confettiTimeout.current);
-      }
+      if (confettiTimeout.current) clearTimeout(confettiTimeout.current);
+      if (popupTimeout.current) clearTimeout(popupTimeout.current);
     };
   }, []);
 
@@ -200,17 +210,6 @@ export default function Game() {
     const cleanup = setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, handleNext);
     return cleanup;
   }, [dispatch, isSuccess, handleNext]);
-
-  // When currentLevelData changes (and is NOT the first level), trigger the pop-up.
-  useEffect(() => {
-    if (currentLevelData && completedLevels.length > 0) {
-      setShowLevelComplete(true);
-      const timer = setTimeout(() => {
-        setShowLevelComplete(false);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [currentLevelData, completedLevels.length]);
 
   // After updating guestCompleted, check if all are done and advance
   useEffect(() => {
