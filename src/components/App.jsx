@@ -1,35 +1,30 @@
-import { useState, useEffect } from 'react';
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { auth, provider } from '../config/firebase';
 import { signInWithPopup, signOut } from "firebase/auth";
+import ByRialGlitch from '../design/byrial.jsx';
+
+// Import CSS normally
 import '../css/App.css';
 import '../css-mob/appMob.css';
 
- // Import the new tutorial component
-import HTP from './howToPlay';
-import Account from './account.jsx';
-import { preloadImages } from '../utils/preLoadImages';
-import ByRialGlitch from "../design/byrial.jsx";
 
-
-//lazyyyyyyyyyy
+// Lazy load all components except CSS and utils
+const HTP = lazy(() => import('./howToPlay'));
+const Account = lazy(() => import('./account.jsx'));
 const Game = lazy(() => import('./game.jsx'));
 const TutorialMode = lazy(() => import('./tutorialMode.jsx'));
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [tutorialCompleted, setTutorialCompleted] = useState(false);
+  const [user, setUser] = React.useState(null);
+  const [tutorialCompleted, setTutorialCompleted] = React.useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    preloadImages();
+  React.useEffect(() => {
     
-    // Check if tutorial is already completed
     const isTutorialDone = localStorage.getItem('tutorialCompleted') === 'true';
     setTutorialCompleted(isTutorialDone);
     
-    // Listen for auth state changes
     const unsub = auth.onAuthStateChanged(setUser);
     return () => unsub();
   }, []);
@@ -37,7 +32,7 @@ function App() {
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
-    } catch (e) {
+    } catch {
       alert("Login failed");
     }
   };
@@ -47,7 +42,6 @@ function App() {
   };
 
   const handlePlay = () => {
-    // Navigate to tutorial if not completed, otherwise to game
     navigate(tutorialCompleted ? '/Game' : '/Tutorial');
   };
 
@@ -60,13 +54,9 @@ function App() {
       <div className='btnRow'>
         <div>
           {user ? (
-            <>
-              <button type="button" id='logOutBtn' className="btn btn-outline-dark" onClick={handleLogout}>
-                Log Out 
-              </button>
-              
-            </>
-          
+            <button type="button" id='logOutBtn' className="btn btn-outline-dark" onClick={handleLogout}>
+              Log Out
+            </button>
           ) : (
             <button type="button" id='logInBtn' className="btn btn-outline-dark" onClick={handleLogin}>
               Log In
@@ -90,7 +80,11 @@ function App() {
           <div className="coming-soon">Coming soon!</div>
         </div>
       </div>
-      <ByRialGlitch />
+
+      {/* Suspense needed for lazy-loaded component */}
+      <Suspense fallback={null}>
+        <ByRialGlitch />
+      </Suspense>
     </>
   );
 }

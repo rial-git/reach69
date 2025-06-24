@@ -1,5 +1,5 @@
 import React from "react";
-import { FaUserCircle } from "react-icons/fa";
+import accountLogo from "../assets/accountLogo.svg";
 import { useNavigate } from "react-router-dom";
 import "../css/account.css";
 
@@ -12,7 +12,7 @@ export default function AccountIcon({ user }) {
       onClick={() => navigate("/account")}
       title="Account"
     >
-      <FaUserCircle size={36} color="#222" />
+      <accountLogo size={36} color="#222" />
     </button>
   );
 }
