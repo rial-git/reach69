@@ -1,6 +1,9 @@
 // utils/tutorialConst.js
 // utils/isMobile.js
-export const isMobile = () => /Mobi|Android/i.test(navigator.userAgent);
+export const isMobile = () =>
+  /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent) ||
+  (navigator.userAgent.includes("Macintosh") && 'ontouchend' in document);
+
 
 export const tutorialNums = [6, 9];
 export const tutorialSteps = [
