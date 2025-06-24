@@ -10,7 +10,7 @@ export const tutorialSteps = [
 export const level1Nums = [6, 9, 0];
 export const level1Steps = [
   "Level 2: Now let's try with three numbers. Click on the number 6",
-  "can you solve this by yourseld? 🌚 also you can right click to undo btw",
+  "can you solve this by yourself? 🌚 also you can right click to undo btw",
   "Perfect! Click the 'merge' operation to combine 6 and 9 into 69",
   "Now click on the 69 you just created",
   "Then click on the number 0, remember you can undo by right clicking",
