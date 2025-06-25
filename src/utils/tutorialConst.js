@@ -47,5 +47,5 @@ export const level3Steps = [
   "Good! 0 * 2 = 0. Now we need to combine this with our 69",
   "You are getting it, Then click on the 0, you can right click in game to undo btw, not here tho",
   "Now choose either add or subtract 0 to 69",
-  "Congratulations! You've completed all tutorial levels. Press Continue to start playing"
+  "Congratulations! You can also play the entire game with just keybaord, let us know your thoughts, would apprectiate it! 💞",
 ];

@@ -14,7 +14,8 @@ const TIPS = [
   "Click the '?' button below to see the How To Play page.",
   "Think ahead before merging blocks.",
   "Some levels require creative use of advanced operations.",
-  "Experiment with different strategies for each level."
+  "Experiment with different strategies for each level.",
+  "enjoying? would appreciate your feedback! "
 ];
 
 function getRandomTip(prevTip) {
