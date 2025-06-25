@@ -1,7 +1,7 @@
 import { ACTIONS, keyMap } from '../utils/constants';
 
 export function setupKeyboardShortcuts(dispatch, ACTIONS, blocksRef, isSuccess, handleNext) {
-  const threshold = 1000; // ms timeframe for buffering multi-key sequences
+  const threshold = 600; // ms timeframe for buffering multi-key sequences
   let pendingSequence = "";
   let pendingTimer = null;
   let lastKeyPressed = null;
