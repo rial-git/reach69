@@ -12,7 +12,7 @@ export default function Account() {
   return (
     <>
     <div className="acc-removal">
-        <h2>For accountal removal or any other inquiries mail us: <a href="mailto:rial.contactus@gmail.com">rial.contactus@gmail.com</a> </h2>
+        <h2>For accountal removal or any other inquiries mail us: <a href="mailto:contact@rial.dev">contact@rial.dev</a> </h2>
     </div>
     <div className="account-page">
       <h2>Account</h2>
